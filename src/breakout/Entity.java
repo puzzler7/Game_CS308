@@ -8,6 +8,13 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+/*
+Currently unused because of unforeseen issues with moving Shapes.
+Going to just do rectangular bricks for now, may refactor later.
+Going to leave this code in here, just in case I do refactor later.
+Will remove before final build. FIXME
+ */
+
 public class Entity extends ImageView {
     private double xVelocity;
     private double yVelocity;
