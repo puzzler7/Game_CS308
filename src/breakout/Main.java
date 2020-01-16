@@ -27,15 +27,16 @@ public class Main extends Application {
     public static final int MILLI_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
-    public static final int BALL_SIZE = 10;
+    public static final int BALL_SIZE = 50;
 
-    public static final int PADDLE_HEIGHT = 10;
+    public static final int PADDLE_HEIGHT = 50;
     public static final int PADDLE_WIDTH = 75;
 
     public static final String HEART_IMAGE = "gameheart.png";
 
     public static final Paint background1 = Color.BLUEVIOLET;
     public static final Paint background2 = Color.BLACK;
+    private static final String BALL_IMAGE = "soccerball2.jpg";
 
     private ArrayList<Ball> balls = new ArrayList<>();
     private ArrayList<Paddle> paddles = new ArrayList<>();
@@ -58,20 +59,25 @@ public class Main extends Application {
 
     public void update(double elapsedTime, Scene scene) {
         boolean dead =  false;
+        for (Ball b: balls) {
+            b.update(elapsedTime);
+        }
         for (Paddle p: paddles) {
+            p.update(elapsedTime);
             p.checkBallCollision(balls);
         }
         for (Ball b: balls) {
-            dead = b.update(elapsedTime);
+            dead = b.checkBounce();
+            //System.out.println(b.getY());
         }
 
         if (dead){
-            scene.setFill(background2);
+            //scene.setFill(background2);
             lives--;
         } else {
             scene.setFill(background1);
         }
-        lifecount.setText("x"+lives);
+        lifecount.setText("X"+lives);
     }
 
     public Scene getMenuScene() {
@@ -96,9 +102,10 @@ public class Main extends Application {
         lifecount.setFont(lifefont);
         root.getChildren().add(lifecount);
 
-        Ball b = new Ball();
+        Image ballImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BALL_IMAGE));
+        Ball b = new Ball(ballImage);
         b.setXVelocity(50);
-        b.setYVelocity(600);
+        b.setYVelocity(200);
         root.getChildren().add(b);
         balls.add(b);
         Paddle p = new Paddle();
@@ -112,7 +119,7 @@ public class Main extends Application {
 
     private void handleMouseInput(double x, double y) {
         for (Paddle p: paddles) {
-            p.update(x);
+            p.queueNewX(x);
         }
     }
 

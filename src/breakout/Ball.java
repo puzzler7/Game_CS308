@@ -6,8 +6,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 public class Ball extends Circle {
-    private int xVelocity;
-    private int yVelocity;
+    private double xVelocity;
+    private double yVelocity;
     private int bounceX; //FIXME remove for Main consts?
     private int bounceY;
     private ImagePattern image;
@@ -33,18 +33,21 @@ public class Ball extends Circle {
         this.setFill(image);
     }
 
-    public boolean update(double elapsedTime) { //currently returns if the ball dies.
-        setX(getX() + xVelocity * elapsedTime);
-        setY(getY() + yVelocity * elapsedTime);
-        if (bounceX != 0 && bounceY != 0) {
-            return checkBounce();
-        } else {
-            System.out.println("Zero bounce!");
-            return true;
-        }
+    public Ball (Image i) {
+        this();
+        image = new ImagePattern(i);
+        this.setFill(image);
     }
 
-    private boolean checkBounce() {
+    public void update(double elapsedTime) { //currently returns if the ball dies.
+        setX(getX() + xVelocity * elapsedTime);
+        setY(getY() + yVelocity * elapsedTime);
+        double mag = xVelocity*xVelocity+yVelocity*yVelocity;
+        mag = Math.pow(mag, .5);
+        setRotate(getRotate()+mag/100);//FIXME
+    }
+
+    public boolean checkBounce() {
         if (getX() < getRadius()) {
             xVelocity *= -1;
             setX(getRadius());
@@ -65,19 +68,19 @@ public class Ball extends Circle {
         return false;
     }
 
-    public int getXVelocity() {
+    public double getXVelocity() {
         return xVelocity;
     }
 
-    public void setXVelocity(int xVelocity) {
+    public void setXVelocity(double xVelocity) {
         this.xVelocity = xVelocity;
     }
 
-    public int getYVelocity() {
+    public double getYVelocity() {
         return yVelocity;
     }
 
-    public void setYVelocity(int yVelocity) {
+    public void setYVelocity(double yVelocity) {
         this.yVelocity = yVelocity;
     }
 

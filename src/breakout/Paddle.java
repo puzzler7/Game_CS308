@@ -7,8 +7,11 @@ import javafx.scene.shape.Shape;
 import java.util.*;
 
 public class Paddle extends Rectangle {
+    double lastX;
+    double newX;
+    double vel;
 
-    public Paddle()  {
+    public Paddle() {
         this(Main.PADDLE_WIDTH);
     }
 
@@ -17,32 +20,47 @@ public class Paddle extends Rectangle {
     }
 
     public Paddle(double width, double height) {
-        this(width, height, Main.HEIGHT - Main.VOID_SIZE-height);
+        this(width, height, Main.HEIGHT - Main.VOID_SIZE - height);
     }
 
     public Paddle(double width, double height, double y) {
-        super(Main.WIDTH/2-width/2, y, width, height);
+        super(Main.WIDTH / 2 - width / 2, y, width, height);
+        lastX = Main.WIDTH / 2 - width / 2;
+        newX = lastX;
         setFill(Color.PURPLE);
     }
 
-    public void update(double x) {
-        setX(x-getWidth()/2);
-        if (getX()<0){
+    public void update(double elapsedTime) {
+        vel = (newX - lastX) / elapsedTime;
+        lastX = newX;
+        setX(newX - getWidth() / 2);
+        if (getX() < 0) {
             setX(0);
         }
-        if (getX()>Main.WIDTH-getWidth()) {
-            setX(Main.WIDTH-getWidth());
+        if (getX() > Main.WIDTH - getWidth()) {
+            setX(Main.WIDTH - getWidth());
         }
 
     }
 
-    public void checkBallCollision(ArrayList<Ball> balls){
-        for (Ball b: balls) {
+    public void checkBallCollision(ArrayList<Ball> balls) {
+        for (Ball b : balls) {
             Shape intersection = Shape.intersect(this, b);
             if (intersection.getBoundsInLocal().getWidth() != -1) {
+                b.setY(getY() - b.getRadius());
                 b.setYVelocity(-b.getYVelocity());
+                if (vel!=0) {
+                    double ballXVel = b.getXVelocity();
+                    double newVel = ballXVel + vel / Math.abs(vel) * Math.pow(Math.abs(vel), .8);//FIXME magic val
+                    double scale = newVel / ballXVel / 2;//FIXME magic val
+                    b.setXVelocity(newVel);
+                    b.setYVelocity(b.getYVelocity() + vel / Math.abs(vel) * Math.pow(Math.abs(vel), .8));
+                }
             }
         }
     }
 
+    public void queueNewX(double x) {
+        newX = x;
+    }
 }
