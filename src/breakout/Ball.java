@@ -3,27 +3,26 @@ package breakout;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 public class Ball extends Circle {
     private int xVelocity;
     private int yVelocity;
-    private int bounceX;
+    private int bounceX; //FIXME remove for Main consts?
     private int bounceY;
     private ImagePattern image;
 
     public Ball() {
-        this(10);
+        this(Main.BALL_SIZE);
     }
 
     public Ball(double radius) {
         this(Main.WIDTH / 2, Main.HEIGHT / 2, radius);
-        setFill(Color.GREEN);
     }
 
     public Ball(double centerX, double centerY, double radius) {
         super(centerX, centerY, radius);
+        setFill(Color.GREEN);
         bounceX = Main.WIDTH;
         bounceY = Main.HEIGHT - Main.VOID_SIZE;
     }
