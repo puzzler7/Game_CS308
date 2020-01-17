@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -32,14 +33,19 @@ public class Main extends Application {
     public static final int PADDLE_HEIGHT = 50;
     public static final int PADDLE_WIDTH = 75;
 
+    public static final int BRICK_WIDTH_HEIGHT_RATIO = 2;
+    public static final int BRICK_HEIGHT = 20;
+
     public static final String HEART_IMAGE = "gameheart.png";
 
     public static final Paint background1 = Color.BLUEVIOLET;
     public static final Paint background2 = Color.BLACK;
+    public static final int BRICK_HEALTH = 1;
     private static final String BALL_IMAGE = "soccerball2.jpg";
 
     private ArrayList<Ball> balls = new ArrayList<>();
     private ArrayList<Paddle> paddles = new ArrayList<>();
+    private ArrayList<RectBrick> bricks = new ArrayList<>();
     private int lives = 10;
     private Text lifecount;
 
@@ -50,14 +56,14 @@ public class Main extends Application {
         stage.setTitle("My first test!");
         stage.show();
         // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLI_DELAY), e -> update(SECOND_DELAY, scene));
+        KeyFrame frame = new KeyFrame(Duration.millis(MILLI_DELAY), e -> update(SECOND_DELAY, scene, stage));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
     }
 
-    public void update(double elapsedTime, Scene scene) {
+    public void update(double elapsedTime, Scene scene, Stage stage) {
         boolean dead =  false;
         for (Ball b: balls) {
             b.update(elapsedTime);
@@ -65,6 +71,12 @@ public class Main extends Application {
         for (Paddle p: paddles) {
             p.update(elapsedTime);
             p.checkBallCollision(balls);
+            //idea: satisfaction paddle bounce
+        }
+        for (RectBrick brick: bricks) {
+            if (brick.checkBallCollision(balls)) {
+                brick.die();
+            }
         }
         for (Ball b: balls) {
             dead = b.checkBounce();
@@ -111,6 +123,10 @@ public class Main extends Application {
         Paddle p = new Paddle();
         root.getChildren().add(p);
         paddles.add(p);
+
+        RectBrick brick = new RectBrick(WIDTH/2, HEIGHT/4);
+        bricks.add(brick);
+        root.getChildren().add(brick);
 
         Scene scene = new Scene(root, WIDTH, HEIGHT, background1);
         scene.setOnMouseMoved(e -> handleMouseInput(e.getX(), e.getY()));
