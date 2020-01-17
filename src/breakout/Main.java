@@ -5,10 +5,13 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -48,24 +51,28 @@ public class Main extends Application {
     private ArrayList<Ball> balls = new ArrayList<>();
     private ArrayList<Paddle> paddles = new ArrayList<>();
     private ArrayList<Brick> bricks = new ArrayList<>();
-    private int lives = 10;
+    private int lives = 1;
     private Text lifecount;
+    private Scene displayScene;
+    private Rectangle deathButton;
 
     @Override
     public void start(Stage stage) throws Exception {
-        Scene scene = getLevelScene(0);
-        stage.setScene(scene);
+        displayScene = getLevelScene(0);
+        stage.setScene(displayScene);
         stage.setTitle("My first test!");
         stage.show();
         // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLI_DELAY), e -> update(SECOND_DELAY, scene, stage));
+        KeyFrame frame = new KeyFrame(Duration.millis(MILLI_DELAY), e -> update(SECOND_DELAY, stage));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
     }
 
-    public void update(double elapsedTime, Scene scene, Stage stage) {
+    public void update(double elapsedTime, Stage stage) {
+        stage.setScene(displayScene);
+        //FIXME stop background physics
         boolean dead = false;
         for (Ball b : balls) {
             b.update(elapsedTime);
@@ -84,20 +91,72 @@ public class Main extends Application {
         }
 
         if (dead) {
-            //scene.setFill(background2);
+            //displayScene.setFill(background2);
             lives--;
         } else {
-            scene.setFill(background1);
+            displayScene.setFill(background1);
         }
         lifecount.setText("X" + lives);
+        if (lives <= 0) {
+            displayScene = getDeathScene();
+            lives = 1;
+        }
     }
 
     public Scene getMenuScene() {
         return null; //FIXME
     }
 
+    public Scene getDeathScene() {
+        Group root = new Group();
+        Text deathText = new Text("You have died.");
+        Font lifefont = new Font("Courier New", 48); //FIXME magic val
+        deathText.setFont(lifefont);
+        deathText.setX(WIDTH / 2 - deathText.getBoundsInLocal().getWidth() / 2);
+        deathText.setY(HEIGHT / 4);
+        root.getChildren().add(deathText);
+
+        deathButton = new Rectangle(70, 20);
+        deathButton.setArcHeight(5);
+        deathButton.setArcWidth(5);
+        deathButton.setX(WIDTH / 2 - deathButton.getWidth() / 2);
+        deathButton.setY(HEIGHT / 2 - deathButton.getHeight() / 2);
+        deathButton.setFill(Color.WHITE);
+        root.getChildren().add(deathButton);
+
+        Scene scene = new Scene(root, WIDTH, HEIGHT, background1);
+        scene.setOnMouseMoved(e -> deathMouse(e.getX(), e.getY()));
+        scene.setOnMouseClicked(e -> deathClick(e.getX(), e.getY()));
+        return scene;
+    }
+
+    private void deathMouse(double x, double y) {
+        if (deathButton.contains(x, y)) {
+            deathButton.setHeight(15);
+            deathButton.setWidth(60);//FIXME magic val all of this
+        } else {
+            deathButton.setHeight(20);
+            deathButton.setWidth(70);
+        }
+        deathButton.setX(WIDTH / 2 - deathButton.getWidth() / 2);
+        deathButton.setY(HEIGHT / 2 - deathButton.getHeight() / 2);
+    }
+
+    private void deathClick(double x, double y) {
+        if (deathButton.contains(x, y)) {
+            displayScene = getLevelScene(0); //FIXME
+            lives = 1;//FIXME
+        }
+    }
+
     public Scene getLevelScene(int level) {
         //FIXME implement level selection - currently, level param is ignored
+
+        balls = new ArrayList<>(); //FIXME better object clearing
+        paddles = new ArrayList<>();
+        bricks = new ArrayList<>();
+        lives = 1;
+
         Group root = new Group();
         Image heartImage = new Image(this.getClass().getClassLoader().getResourceAsStream(HEART_IMAGE));
         ImageView heart = new ImageView(heartImage);

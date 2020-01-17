@@ -11,7 +11,7 @@ public abstract class Brick {
     protected int hp;
     protected ImagePattern image;
 
-    abstract void setCenterX(double x);
+    abstract void setCenterX(double x);//FIXME do a thing with getBoundinLocal/Parent?
     abstract void setCenterY(double y);
 
     public void checkBallCollision(ArrayList<Ball> balls) {
