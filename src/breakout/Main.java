@@ -28,24 +28,26 @@ public class Main extends Application {
     public static final int MILLI_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
-    public static final int BALL_SIZE = 50;
+    public static final int BALL_SIZE = 20;
 
     public static final int PADDLE_HEIGHT = 50;
     public static final int PADDLE_WIDTH = 75;
 
     public static final int BRICK_WIDTH_HEIGHT_RATIO = 2;
-    public static final int BRICK_HEIGHT = 20;
+    public static final double BRICK_HEIGHT = 20;
+    public static final int BRICK_HEALTH = 1;
+    public static final double BRICK_RADIUS = 20;
 
     public static final String HEART_IMAGE = "gameheart.png";
 
     public static final Paint background1 = Color.BLUEVIOLET;
     public static final Paint background2 = Color.BLACK;
-    public static final int BRICK_HEALTH = 1;
+
     private static final String BALL_IMAGE = "soccerball2.jpg";
 
     private ArrayList<Ball> balls = new ArrayList<>();
     private ArrayList<Paddle> paddles = new ArrayList<>();
-    private ArrayList<RectBrick> bricks = new ArrayList<>();
+    private ArrayList<Brick> bricks = new ArrayList<>();
     private int lives = 10;
     private Text lifecount;
 
@@ -64,32 +66,30 @@ public class Main extends Application {
     }
 
     public void update(double elapsedTime, Scene scene, Stage stage) {
-        boolean dead =  false;
-        for (Ball b: balls) {
+        boolean dead = false;
+        for (Ball b : balls) {
             b.update(elapsedTime);
         }
-        for (Paddle p: paddles) {
+        for (Paddle p : paddles) {
             p.update(elapsedTime);
             p.checkBallCollision(balls);
             //idea: satisfaction paddle bounce
         }
-        for (RectBrick brick: bricks) {
-            if (brick.checkBallCollision(balls)) {
-                brick.die();
-            }
+        for (Brick brick : bricks) {
+            brick.checkBallCollision(balls);
         }
-        for (Ball b: balls) {
+        for (Ball b : balls) {
             dead = b.checkBounce();
             //System.out.println(b.getY());
         }
 
-        if (dead){
+        if (dead) {
             //scene.setFill(background2);
             lives--;
         } else {
             scene.setFill(background1);
         }
-        lifecount.setText("X"+lives);
+        lifecount.setText("X" + lives);
     }
 
     public Scene getMenuScene() {
@@ -104,11 +104,11 @@ public class Main extends Application {
         heart.setPreserveRatio(true);
         heart.setFitHeight(VOID_SIZE);
         heart.setX(0);
-        heart.setY(HEIGHT-VOID_SIZE);
+        heart.setY(HEIGHT - VOID_SIZE);
         root.getChildren().add(heart);
-        lifecount = new Text("x"+lives);
+        lifecount = new Text("x" + lives);
         lifecount.setX(heart.getBoundsInLocal().getWidth());
-        lifecount.setY(HEIGHT-VOID_SIZE + 40); //FIXME magic val
+        lifecount.setY(HEIGHT - VOID_SIZE + 40); //FIXME magic val
         lifecount.setFill(Color.WHITE);
         Font lifefont = new Font("Courier New", 48); //FIXME magic val
         lifecount.setFont(lifefont);
@@ -124,9 +124,9 @@ public class Main extends Application {
         root.getChildren().add(p);
         paddles.add(p);
 
-        RectBrick brick = new RectBrick(WIDTH/2, HEIGHT/4);
+        CircleBrick brick = new CircleBrick(WIDTH / 2, HEIGHT / 4);
         bricks.add(brick);
-        root.getChildren().add(brick);
+        root.getChildren().add(brick.shape);
 
         Scene scene = new Scene(root, WIDTH, HEIGHT, background1);
         scene.setOnMouseMoved(e -> handleMouseInput(e.getX(), e.getY()));
@@ -134,7 +134,7 @@ public class Main extends Application {
     }
 
     private void handleMouseInput(double x, double y) {
-        for (Paddle p: paddles) {
+        for (Paddle p : paddles) {
             p.queueNewX(x);
         }
     }

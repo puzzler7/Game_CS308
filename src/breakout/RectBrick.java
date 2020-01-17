@@ -1,14 +1,11 @@
 package breakout;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
-import java.util.ArrayList;
-
-public class RectBrick extends Rectangle {
-    private int hp;
-
+public class RectBrick extends Brick {
     //Idea: Brick superclass (interface?) with a shape instance var and image/frame handling
 
     public RectBrick(double x, double y) {
@@ -19,33 +16,27 @@ public class RectBrick extends Rectangle {
         this(x, y, health, Main.BRICK_HEIGHT);
     }
 
+    public RectBrick(double x, double y, Image i) {
+        this(x,y);
+        image = new ImagePattern(i);
+        shape.setFill(image);
+    }
+
     public RectBrick(double x, double y, int health, double height) {
-        super(height*Main.BRICK_WIDTH_HEIGHT_RATIO, height);
-        setFill(Color.ORANGE);
+        shape = new Rectangle(height*Main.BRICK_WIDTH_HEIGHT_RATIO, height);
+        shape.setFill(Color.ORANGE);
         hp = health;
-        setX(x);
-        setY(y);
+        setCenterX(x);
+        setCenterY(y);
     }
 
-    public boolean checkBallCollision(ArrayList<Ball> balls) {
-        boolean ret = false;
-        for (Ball b : balls) {
-            Shape intersection = Shape.intersect(this, b);
-            if (intersection.getBoundsInLocal().getWidth() != -1) {
-                b.setYVelocity(-b.getYVelocity());//FIXME side bounce
-                ret = hit(1); //FIXME dmg numbers vary by ball?
-            }
-        }
-        return ret;
+    @Override
+    void setCenterX(double x) {
+        ((Rectangle)shape).setX(x-((Rectangle) shape).getWidth()/2);
     }
 
-    public boolean hit(int dmg) {
-        hp -= dmg;
-        return hp<=0;
-    }
-
-    public void die() {
-        setX(-999);
-        setY(-999);
+    @Override
+    void setCenterY(double y) {
+        ((Rectangle)shape).setY(y-((Rectangle) shape).getHeight()/2);
     }
 }
