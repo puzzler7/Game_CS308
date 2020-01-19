@@ -1,6 +1,6 @@
 ###Big things:
 
-- Make bricks
+- Make button
 - Make powerups
 - Make level loads
 - Menu screens

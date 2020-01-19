@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import org.w3c.dom.css.Rect;
 
 public class RectBrick extends Brick {
     //Idea: Brick superclass (interface?) with a shape instance var and image/frame handling
@@ -38,5 +39,15 @@ public class RectBrick extends Brick {
     @Override
     void setCenterY(double y) {
         ((Rectangle)shape).setY(y-((Rectangle) shape).getHeight()/2);
+    }
+
+    @Override
+    double getCenterX() {
+        return ((Rectangle)shape).getX()+((Rectangle)shape).getWidth()/2;
+    }
+
+    @Override
+    double getCenterY() {
+        return ((Rectangle)shape).getY()+((Rectangle)shape).getHeight()/2;
     }
 }

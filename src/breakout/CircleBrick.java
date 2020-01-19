@@ -28,12 +28,24 @@ public class CircleBrick extends Brick{
     }
 
     @Override
-    void setCenterX(double x) {
+    public void setCenterX(double x) {
         ((Circle)shape).setCenterX(x);
     }
 
     @Override
-    void setCenterY(double y) {
+    public void setCenterY(double y) {
         ((Circle)shape).setCenterY(y);
     }
+
+    @Override
+    double getCenterX() {
+        return ((Circle)shape).getCenterX();
+    }
+
+    @Override
+    double getCenterY() {
+        return ((Circle)shape).getCenterY();
+    }
+
+
 }

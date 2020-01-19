@@ -11,6 +11,7 @@ public class Ball extends Circle {
     private int bounceX; //FIXME remove for Main consts?
     private int bounceY;
     private ImagePattern image;
+    private int dmg;
 
     public Ball() {
         this(Main.BALL_SIZE);
@@ -23,6 +24,7 @@ public class Ball extends Circle {
     public Ball(double centerX, double centerY, double radius) {
         super(centerX, centerY, radius);
         setFill(Color.GREEN);
+        dmg = 1;
         bounceX = Main.WIDTH;
         bounceY = Main.HEIGHT - Main.VOID_SIZE;
     }
@@ -114,5 +116,13 @@ public class Ball extends Circle {
 
     public double getY() {
         return getCenterY();
+    }
+
+    public int getDmg() {
+        return dmg;
+    }
+
+    public void setDmg(int dmg) {
+        this.dmg = dmg;
     }
 }

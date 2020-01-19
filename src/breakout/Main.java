@@ -37,7 +37,7 @@ public class Main extends Application {
     public static final int PADDLE_WIDTH = 75;
 
     public static final int BRICK_WIDTH_HEIGHT_RATIO = 2;
-    public static final double BRICK_HEIGHT = 20;
+    public static final double BRICK_HEIGHT = 40;
     public static final int BRICK_HEALTH = 1;
     public static final double BRICK_RADIUS = 20;
 
@@ -45,6 +45,8 @@ public class Main extends Application {
 
     public static final Paint background1 = Color.BLUEVIOLET;
     public static final Paint background2 = Color.BLACK;
+    public static final double POWERUP_WIDTH_HEIGHT_RATIO = 2;
+    public static final double POWERUP_HEIGHT = 20;
 
     private static final String BALL_IMAGE = "soccerball2.jpg";
 
@@ -62,7 +64,6 @@ public class Main extends Application {
         stage.setScene(displayScene);
         stage.setTitle("My first test!");
         stage.show();
-        // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
         KeyFrame frame = new KeyFrame(Duration.millis(MILLI_DELAY), e -> update(SECOND_DELAY, stage));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -183,9 +184,13 @@ public class Main extends Application {
         root.getChildren().add(p);
         paddles.add(p);
 
-        CircleBrick brick = new CircleBrick(WIDTH / 2, HEIGHT / 4);
-        bricks.add(brick);
-        root.getChildren().add(brick.shape);
+        TeleBrick brick1 = new TeleBrick(WIDTH / 4, HEIGHT / 4);
+        TeleBrick brick2 = new TeleBrick(3*WIDTH / 4, HEIGHT / 4);
+        bricks.add(brick1);
+        bricks.add(brick2);
+        TeleBrick.pair(brick1, brick2);
+        root.getChildren().add(brick1.shape);
+        root.getChildren().add(brick2.shape);
 
         Scene scene = new Scene(root, WIDTH, HEIGHT, background1);
         scene.setOnMouseMoved(e -> handleMouseInput(e.getX(), e.getY()));

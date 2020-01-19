@@ -10,18 +10,25 @@ public abstract class Brick {
     protected Shape shape;
     protected int hp;
     protected ImagePattern image;
+    protected boolean mustBeHit = true;
 
     abstract void setCenterX(double x);//FIXME do a thing with getBoundinLocal/Parent?
     abstract void setCenterY(double y);
+    abstract double getCenterX();
+    abstract double getCenterY();
 
     public void checkBallCollision(ArrayList<Ball> balls) {
         for (Ball b : balls) {
             Shape intersection = Shape.intersect(shape, b);
             if (intersection.getBoundsInLocal().getWidth() != -1) {
-                b.setYVelocity(-b.getYVelocity());//FIXME side bounce
-                hit(1); //FIXME dmg numbers vary by ball?
+                onHit(b);
             }
         }
+    }
+
+    protected void onHit(Ball b) {
+        b.setYVelocity(-b.getYVelocity());//FIXME side bounce
+        hit(b.getDmg()); //FIXME dmg numbers vary by ball?
     }
 
     public int getHp() {
@@ -44,5 +51,13 @@ public abstract class Brick {
     public void die() {
         setCenterX(-Main.WIDTH*2); //FIXME better soln?
         setCenterY(-Main.HEIGHT*2);
+    }
+
+    public boolean getMustBeHit() {
+        return mustBeHit;
+    }
+
+    public void setMustBeHit(boolean hit) {
+        mustBeHit = hit;
     }
 }
