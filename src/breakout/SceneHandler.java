@@ -19,6 +19,8 @@ public class SceneHandler {
     private static PushButton deathButton;
     private static Image heartImage;
     private static Image ballImage;
+    private static ArrayList<PushButton> menuButtons = new ArrayList<>();
+    private static Font mainfont = new Font("Courier New", 48); //FIXME magic val and dupe
 
     public static ArrayList<String> readFile(String path) throws FileNotFoundException {
         File file = new File(path);
@@ -51,14 +53,15 @@ public class SceneHandler {
         lifecount.setX(heart.getBoundsInLocal().getWidth());
         lifecount.setY(Main.HEIGHT - Main.VOID_SIZE + 40); //FIXME magic val
         lifecount.setFill(Color.WHITE);
-        Font lifefont = new Font("Courier New", 48); //FIXME magic val
-        lifecount.setFont(lifefont);
+        lifecount.setFont(mainfont);
         root.getChildren().add(lifecount);
 
         Image ballImage = new Image(SceneHandler.class.getClassLoader().getResourceAsStream(Main.BALL_IMAGE));
         Ball b = new Ball(ballImage);
-        b.setXVelocity(0);
-        b.setYVelocity(250); //FIXME magic val
+        b.setX(Main.BALL_X);
+        b.setY(Main.BALL_Y);
+        b.setXVelocity(Main.BALL_X_VELOCITY);
+        b.setYVelocity(Main.BALL_Y_VELOCITY);
         root.getChildren().add(b);
         balls.add(b);
 
@@ -120,18 +123,18 @@ public class SceneHandler {
     public static Scene getDeathScene() {
         Group root = new Group();
         Text deathText = new Text("You have died.");
-        Font lifefont = new Font("Courier New", 48); //FIXME magic val
-        deathText.setFont(lifefont);
+        deathText.setFont(mainfont);
         deathText.setX(Main.WIDTH / 2 - deathText.getBoundsInLocal().getWidth() / 2);
         deathText.setY(Main.HEIGHT / 4);
         root.getChildren().add(deathText);
 
-        deathButton = new PushButton(0,0,50, "Retry?");
+        //FIXME score indicator
+
+        deathButton = new PushButton(0,0,50, "Menu"); //FIXME magic val height
         deathButton.setCenterX(Main.WIDTH / 2);
         deathButton.setCenterY(Main.HEIGHT / 2);
         deathButton.setFill(Color.WHITE);
-        root.getChildren().add(deathButton);
-        root.getChildren().add(deathButton.getText());
+        root.getChildren().addAll(deathButton.getObjects());
 
         Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
         scene.setOnMouseMoved(e -> deathMouse(e.getX(), e.getY()));
@@ -149,14 +152,62 @@ public class SceneHandler {
 
     static void deathClick(double x, double y) {
         if (deathButton.contains(x, y)) {
-            Main.setDisplayScene(getLevelScene(1, Main.getBalls(), Main.getPaddles(), Main.getBricks(), 1)); //FIXME
-            Main.setLives(1);//FIXME
+            Main.setDisplayScene(getMenuScene());
         }
     }
 
     public static Scene getMenuScene() {
-        return null; //FIXME
+        Main.setLives(Integer.MAX_VALUE); //FIXME
+        menuButtons.clear();
+        Group root = new Group();
+        Text titleText = new Text("Speedy Bricks");
+
+        titleText.setFont(mainfont);
+        titleText.setX(Main.WIDTH / 2 - titleText.getBoundsInLocal().getWidth() / 2);
+        titleText.setY(Main.HEIGHT / 4);
+        root.getChildren().add(titleText);
+
+        PushButton startButton = new PushButton(0,0,50, "Start"); //FIXME magic val height
+        startButton.setCenterX(Main.WIDTH / 2);
+        startButton.setCenterY(Main.HEIGHT / 2);
+        root.getChildren().addAll(startButton.getObjects());
+        menuButtons.add(startButton);
+
+        PushButton rulesButton = new PushButton(0,0,50, "Rules"); //FIXME magic val height
+        rulesButton.setCenterX(Main.WIDTH / 2);
+        rulesButton.setCenterY(Main.HEIGHT *5/8);
+        root.getChildren().addAll(rulesButton.getObjects());
+        menuButtons.add(rulesButton);
+
+        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
+        scene.setOnMouseMoved(e -> menuMouse(e.getX(), e.getY()));
+        scene.setOnMouseClicked(e -> menuClick(e.getX(), e.getY()));
+        return scene;
     }
+
+    static void menuMouse(double x, double y) {
+        for (PushButton button: menuButtons) {
+            if (button.contains(x, y)) {
+                button.onMouseover();
+            } else {
+                button.onMouseoff();
+            }
+        }
+    }
+
+    static void menuClick(double x, double y) {
+        if (menuButtons.get(0).contains(x, y)) {
+            Main.setDisplayScene(getLevelScene(1, Main.getBalls(), Main.getPaddles(), Main.getBricks(),
+                    Main.STARTING_LIVES)); //FIXME
+        } else if (menuButtons.get(1).contains(x,y)) {
+            Main.setDisplayScene(getRulesScene());
+        }
+    }
+
+    private static Scene getRulesScene() {
+        return null;
+    }
+
 
     public Scene getVictoryScene() {
         return null;

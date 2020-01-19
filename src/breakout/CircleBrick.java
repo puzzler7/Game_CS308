@@ -17,8 +17,7 @@ public class CircleBrick extends Brick{
 
     public CircleBrick(double x, double y, Image i) {
         this(x,y);
-        image = new ImagePattern(i);
-        shape.setFill(image);
+        setImage(i);
     }
 
     public CircleBrick(double x, double y, int health, double radius) {

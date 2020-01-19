@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -11,6 +12,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 
 public class Main extends Application {
@@ -24,6 +26,10 @@ public class Main extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
     public static final int BALL_SIZE = 20;
+    public static final double BALL_X = WIDTH/2;
+    public static final double BALL_Y = HEIGHT * 5 / 8;
+    public static final double BALL_X_VELOCITY = 0;
+    public static final double BALL_Y_VELOCITY = 200;
 
     public static final int PADDLE_HEIGHT = 30;
     public static final int PADDLE_WIDTH = 150;
@@ -46,6 +52,7 @@ public class Main extends Application {
     public static final double BUTTON_HEIGHT = 50;
     public static final double BUTTON_WIDTH_HEIGHT_RATIO = 4;
     public static final double BUTTON_SHRINK = 0.95;
+    public static final int STARTING_LIVES = 5;
 
 
     private static ArrayList<Ball> balls = new ArrayList<>();
@@ -59,7 +66,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        displayScene = SceneHandler.getLevelScene(1,balls, paddles, bricks, 1);
+        displayScene = SceneHandler.getMenuScene();
         stage.setScene(displayScene);
         stage.setTitle("My first test!");
         stage.show();
@@ -97,21 +104,35 @@ public class Main extends Application {
         }
         for (Ball b : balls) {
             dead = b.checkBounce();
-            //System.out.println(b.getY());
         }
 
         if (dead) {
-            //displayScene.setFill(background2);
             lives--;
-        } else {
-            displayScene.setFill(background1);
+            resetBall();
         }
-        SceneHandler.getLifecount().setText("X" + lives);
+        try {
+            SceneHandler.getLifecount().setText("X" + lives);
+        } catch (NullPointerException e) {
+            //FIXME
+        }
         if (lives <= 0) {
             displayScene = SceneHandler.getDeathScene();
             lives = 3; //FIXME magic val
         }
-        //System.out.println(bricks);
+    }
+
+    private void resetBall() {
+        for (int i = 1; i < balls.size(); i++) {
+            balls.remove(i);
+        }
+        Ball b = balls.get(0);
+        b.setX(Main.BALL_X);
+        b.setY(Main.BALL_Y);
+        b.setXVelocity(Main.BALL_X_VELOCITY);
+        b.setYVelocity(Main.BALL_Y_VELOCITY);//FIXME copied from scene handler
+        for (Paddle p: paddles) {
+            p.setX(WIDTH/2);
+        }
     }
 
     private void handlePowerups() {

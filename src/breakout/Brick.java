@@ -27,6 +27,11 @@ public abstract class Brick {
         }
     }
 
+    public void setImage(Image i) {
+        image = new ImagePattern(i);
+        shape.setFill(image);
+    }
+
     public void update(){}
 
     protected void onHit(Ball b) {

@@ -27,6 +27,8 @@ public class Paddle extends Rectangle {
         super(Main.WIDTH / 2 - width / 2, y, width, height);
         lastX = Main.WIDTH / 2 - width / 2;
         newX = lastX;
+        setArcHeight(getHeight()/2);
+        setArcWidth(getWidth()/4);//FIXME magic val
         setFill(Color.PURPLE);
     }
 

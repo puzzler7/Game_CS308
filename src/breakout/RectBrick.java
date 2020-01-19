@@ -18,8 +18,7 @@ public class RectBrick extends Brick {
 
     public RectBrick(double x, double y, Image i) {
         this(x,y);
-        image = new ImagePattern(i);
-        shape.setFill(image);
+        setImage(i);
     }
 
     public RectBrick(double x, double y, int health, double height) {

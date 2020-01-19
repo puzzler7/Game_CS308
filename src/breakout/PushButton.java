@@ -1,11 +1,15 @@
 package breakout;
 
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class PushButton extends Rectangle {
     private Text text;
@@ -20,10 +24,11 @@ public class PushButton extends Rectangle {
 
 
     public PushButton(double x, double y, double height, String msg) {
-        super(x,y,height*Main.BUTTON_WIDTH_HEIGHT_RATIO*height, height);
+        super(x,y,height*Main.BUTTON_WIDTH_HEIGHT_RATIO, height);
         maxHeight = height;
         centerX = x+height/2;
         centerY = y+height/2*Main.BUTTON_WIDTH_HEIGHT_RATIO;
+        setFill(Color.WHITE);
         setArcHeight(height/3);
         setArcWidth(height/3);//FIXME magic val
         text = new Text(msg);
@@ -63,14 +68,23 @@ public class PushButton extends Rectangle {
     public void setCenterX(double x) {
         setX(x-getWidth()/2);
         centerX = x;
+        center();
     }
 
     public void setCenterY(double y) {
         setY(y-getWidth()/2);
         centerY = y;
+        center();
     }
 
     public Text getText() {
         return text;
+    }
+
+    public Collection<Node> getObjects() {
+        ArrayList<Node> objs = new ArrayList<>();
+        objs.add(this);
+        objs.add(text);
+        return objs;
     }
 }
