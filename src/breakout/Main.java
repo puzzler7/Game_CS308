@@ -134,6 +134,13 @@ public class Main extends Application {
         //FIXME
     }
 
+    private boolean hasWon() {
+        for (Brick brick: bricks) {
+            if (brick.mustBeHit()&&!brick.isDead()) return false;
+        }
+        return true;
+    }
+
     public static ArrayList<Ball> getBalls() {
         return balls;
     }

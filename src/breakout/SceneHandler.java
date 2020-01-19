@@ -58,8 +58,8 @@ public class SceneHandler {
 
         Image ballImage = new Image(SceneHandler.class.getClassLoader().getResourceAsStream(Main.BALL_IMAGE));
         Ball b = new Ball(ballImage);
-        b.setXVelocity(50);
-        b.setYVelocity(200);
+        b.setXVelocity(0);
+        b.setYVelocity(250); //FIXME magic val
         root.getChildren().add(b);
         balls.add(b);
 

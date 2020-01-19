@@ -28,6 +28,21 @@ public class CircleBrick extends Brick{
     }
 
     @Override
+    public void onHit(Ball b) {
+        double mag = b.getXVelocity()*b.getXVelocity()+b.getYVelocity()*b.getYVelocity();
+        mag = Math.pow(mag, .5);
+        double newX = b.getX()-getCenterX();
+        double newY = b.getY()-getCenterY();
+        double norm = newX*newX+newY*newY;
+        norm = Math.pow(norm, .5);
+        newX *= mag/norm;
+        newY *= mag/norm;
+        b.setXVelocity(newX);
+        b.setYVelocity(newY);
+        hit(b.getDmg());
+    }
+
+    @Override
     public void setCenterX(double x) {
         ((Circle)shape).setCenterX(x);
     }

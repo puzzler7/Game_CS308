@@ -27,7 +27,7 @@ public class TeleBrick extends CircleBrick {
     }
 
     @Override
-    protected void onHit(Ball b) {
+    public void onHit(Ball b) {
         die();
         b.setCenterX(portal.getCenterX());
         b.setCenterY(portal.getCenterY());

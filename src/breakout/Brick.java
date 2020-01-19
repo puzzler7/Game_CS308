@@ -11,6 +11,7 @@ public abstract class Brick {
     protected int hp;
     protected ImagePattern image;
     protected boolean mustBeHit = true;
+    protected boolean dead = false;
 
     abstract void setCenterX(double x);//FIXME do a thing with getBoundinLocal/Parent?
     abstract void setCenterY(double y);
@@ -26,9 +27,11 @@ public abstract class Brick {
         }
     }
 
+    public void update(){}
+
     protected void onHit(Ball b) {
         b.setYVelocity(-b.getYVelocity());//FIXME side bounce
-        hit(b.getDmg()); //FIXME dmg numbers vary by ball?
+        hit(b.getDmg());
     }
 
     public int getHp() {
@@ -51,9 +54,14 @@ public abstract class Brick {
     public void die() {
         setCenterX(-Main.WIDTH*2); //FIXME better soln?
         setCenterY(-Main.HEIGHT*2);
+        dead = true;
     }
 
-    public boolean getMustBeHit() {
+    public boolean isDead() {
+        return dead;
+    }
+
+    public boolean mustBeHit() {
         return mustBeHit;
     }
 
