@@ -3,18 +3,9 @@ package breakout;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -52,7 +43,9 @@ public class Main extends Application {
     public static final int POWERUP_DURATION = 300;
 
     public static final String BALL_IMAGE = "soccerball2.jpg";
-
+    public static final double BUTTON_HEIGHT = 50;
+    public static final double BUTTON_WIDTH_HEIGHT_RATIO = 4;
+    public static final double BUTTON_SHRINK = 0.95;
 
 
     private static ArrayList<Ball> balls = new ArrayList<>();
@@ -113,10 +106,10 @@ public class Main extends Application {
         } else {
             displayScene.setFill(background1);
         }
-        //lifecount.setText("X" + lives);
+        SceneHandler.getLifecount().setText("X" + lives);
         if (lives <= 0) {
             displayScene = SceneHandler.getDeathScene();
-            lives = 1;
+            lives = 3; //FIXME magic val
         }
         //System.out.println(bricks);
     }

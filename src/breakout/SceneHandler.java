@@ -11,13 +11,12 @@ import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SceneHandler {
     private static Text lifecount;
-    private static Rectangle deathButton;
+    private static PushButton deathButton;
     private static Image heartImage;
     private static Image ballImage;
 
@@ -127,13 +126,12 @@ public class SceneHandler {
         deathText.setY(Main.HEIGHT / 4);
         root.getChildren().add(deathText);
 
-        deathButton = new Rectangle(70, 20);
-        deathButton.setArcHeight(5);
-        deathButton.setArcWidth(5);
-        deathButton.setX(Main.WIDTH / 2 - deathButton.getWidth() / 2);
-        deathButton.setY(Main.HEIGHT / 2 - deathButton.getHeight() / 2);
+        deathButton = new PushButton(0,0,50, "Retry?");
+        deathButton.setCenterX(Main.WIDTH / 2);
+        deathButton.setCenterY(Main.HEIGHT / 2);
         deathButton.setFill(Color.WHITE);
         root.getChildren().add(deathButton);
+        root.getChildren().add(deathButton.getText());
 
         Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
         scene.setOnMouseMoved(e -> deathMouse(e.getX(), e.getY()));
@@ -143,14 +141,10 @@ public class SceneHandler {
 
     static void deathMouse(double x, double y) {
         if (deathButton.contains(x, y)) {
-            deathButton.setHeight(15);
-            deathButton.setWidth(60);//FIXME magic val all of this
+            deathButton.onMouseover();
         } else {
-            deathButton.setHeight(20);
-            deathButton.setWidth(70);
+            deathButton.onMouseoff();
         }
-        deathButton.setX(Main.WIDTH / 2 - deathButton.getWidth() / 2);
-        deathButton.setY(Main.HEIGHT / 2 - deathButton.getHeight() / 2);
     }
 
     static void deathClick(double x, double y) {
@@ -162,5 +156,17 @@ public class SceneHandler {
 
     public static Scene getMenuScene() {
         return null; //FIXME
+    }
+
+    public Scene getVictoryScene() {
+        return null;
+    }
+
+    public static Text getLifecount() {
+        return lifecount;
+    }
+
+    public static Rectangle getDeathButton() {
+        return deathButton;
     }
 }
