@@ -27,14 +27,18 @@ public class RectBrick extends Brick {
         hp = health;
         setCenterX(x);
         setCenterY(y);
+        updateImage();
     }
 
     @Override
     public void onHit(Ball b) {
         if (b.getCenterX()<getCenterX()-getWidth()/2 || b.getCenterX()>getCenterX()+getWidth()/2) {
-            b.setXVelocity(-b.getXVelocity());
-        } else {
-            b.setYVelocity(-b.getYVelocity());
+            b.setXNegate(-1);
+            System.out.println("x");
+        }
+        if (b.getCenterY()<getCenterY()-getHeight()/2 || b.getCenterY()>getCenterY()+getHeight()/2) {
+            b.setYNegate(-1);
+            System.out.println("y");
         }
         super.onHit(b);
     }

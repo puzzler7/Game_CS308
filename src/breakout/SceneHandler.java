@@ -13,6 +13,7 @@ import javafx.scene.text.TextAlignment;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class SceneHandler {
@@ -141,6 +142,7 @@ public class SceneHandler {
         brickCodes.remove(0);
         double x = 0;
         double y = 0;
+        HashMap<Character, TeleBrick> teleTracker = new HashMap<>();
         for (String brickCode : brickCodes) {
             x = 0;
             for (String code : brickCode.split(" ")) {
@@ -154,6 +156,22 @@ public class SceneHandler {
                         brick = new RectBrick((x + .5) * brickWidth, (y + .5) * brickWidth / Main.BRICK_WIDTH_HEIGHT_RATIO,
                                 Integer.parseInt("" + code.charAt(1)), brickWidth / Main.BRICK_WIDTH_HEIGHT_RATIO);
                         break;
+                    case 'b':
+                        double size = Integer.parseInt("" + code.charAt(1));
+                        brick = new BouncerBrick((x+size/2) * brickWidth,
+                                (y +size/2) * brickWidth / Main.BRICK_WIDTH_HEIGHT_RATIO,
+                                0, brickWidth /Main.BRICK_WIDTH_HEIGHT_RATIO/ 2*size);
+                        break;
+                    case 't':
+                        brick = new TeleBrick((x + .5) * brickWidth, (y + .5) * brickWidth / Main.BRICK_WIDTH_HEIGHT_RATIO,
+                                1, brickWidth /Main.BRICK_WIDTH_HEIGHT_RATIO/ 2);
+                        TeleBrick other = teleTracker.getOrDefault(code.charAt(1),null);
+                        if (other != null) {
+                            TeleBrick.pair((TeleBrick)brick, other);
+                        }
+                        else {
+                            teleTracker.put(code.charAt(1),(TeleBrick)brick);
+                        }
                 }
                 if (brick != null) {
                     root.getChildren().add(brick.getShape());

@@ -46,9 +46,10 @@ public class PowerUp extends RectBrick{
     }
 
     @Override
-    public void checkBallCollision(ArrayList<Ball> balls) {
-        return;
-    }
+    public void checkBallCollision(ArrayList<Ball> balls) {}
+
+    @Override
+    public void onHit(Ball b) {}
 
     public void update(double elapsedTime) {
         setCenterY(getCenterY()+elapsedTime*yVelocity);

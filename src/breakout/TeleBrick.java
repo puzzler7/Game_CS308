@@ -1,6 +1,7 @@
 package breakout;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 public class TeleBrick extends CircleBrick {
     private TeleBrick portal;
@@ -32,5 +33,10 @@ public class TeleBrick extends CircleBrick {
         b.setCenterX(portal.getCenterX());
         b.setCenterY(portal.getCenterY());
         portal.die();
+    }
+
+    @Override
+    protected void updateImage() {
+        shape.setFill(Color.PURPLE); //FIXME
     }
 }

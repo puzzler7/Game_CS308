@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Shape;
 
+import javax.print.attribute.standard.NumberUp;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -42,6 +43,20 @@ public abstract class Brick {
         checkForPowerup();
         Main.setScore(Main.getScore()+getScore());
         hit(b.getDmg());
+        updateImage();
+    }
+
+    protected void updateImage() {
+        try {
+            if (hp > 0) {
+                Image i = new Image(Brick.class.getClassLoader().getResourceAsStream(Main.BRICK_IMAGE_PATH_START
+                        + hp + Main.BRICK_IMAGE_PATH_END));
+
+                setImage(i);
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void checkForPowerup(){

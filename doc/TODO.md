@@ -1,10 +1,17 @@
 ###Big things:
 
-- Make button
-- Make powerups
-- Make level loads
-- Menu screens
-- Make drain score
+- Make rules splash
+- rotate to ball velocity to vertical
+
+- powerup images
+- non standard brick images
 
 
-rotate to ball velocity to vertical
+
+
+- readme and comments
+
+
+- add bricks
+- add powerups
+- add levels

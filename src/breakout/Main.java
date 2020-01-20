@@ -35,7 +35,7 @@ public class Main extends Application {
     public static final int PADDLE_HEIGHT = 30;
     public static final int PADDLE_WIDTH = 150;
 
-    public static final int BRICK_WIDTH_HEIGHT_RATIO = 2;
+    public static final int BRICK_WIDTH_HEIGHT_RATIO = 3;
     public static final double BRICK_HEIGHT = 40;
     public static final int BRICK_HEALTH = 1;
     public static final double BRICK_RADIUS = 20;
@@ -53,6 +53,9 @@ public class Main extends Application {
     public static final double BUTTON_HEIGHT = 50;
     public static final double BUTTON_WIDTH_HEIGHT_RATIO = 4;
     public static final double BUTTON_SHRINK = 0.95;
+    public static final double BOUNCER_SPEED = 1.05;
+    public static final String BRICK_IMAGE_PATH_START = "OpenGameArt/PNG/";
+    public static final String BRICK_IMAGE_PATH_END = "-Breakout-Tiles.png";
     private static final int SCORE_PER_FRAME = 1;
     public static Font MAIN_FONT = new Font("Courier New", 48);
     public static Font DISPLAY_FONT = new Font("Courier New", 40);
@@ -61,7 +64,7 @@ public class Main extends Application {
     public static final int STARTING_SCORE = 500;
     public static final int MAX_LEVEL = 2;
 
-    public static final String[] POWERUP_CODES = {"newlife"};
+    public static final String[] POWERUP_CODES = {"newlife", "+1000", "-1000"};
 
 
     private static ArrayList<Ball> balls = new ArrayList<>();
@@ -174,7 +177,6 @@ public class Main extends Application {
         for (String id: powerupTracker.keySet()){
             if (powerupTracker.get(id)>0){
                 if (powerupTracker.get(id) == POWERUP_DURATION) {
-                    System.out.println("in");
                     activatePowerup(id);
                     continue;
                 }
@@ -190,7 +192,13 @@ public class Main extends Application {
         if (id.equals(POWERUP_CODES[0])) { //newlife
             lives++;
             powerupTracker.put(id,0);
-            System.out.println("good");
+        } else if (id.equals(POWERUP_CODES[1])) { //+1000
+            score += 1000;
+            powerupTracker.put(id,0);
+        }
+        else if (id.equals(POWERUP_CODES[2])) { //-1000
+            score -= 1000;
+            powerupTracker.put(id,0);
         }
     }
 

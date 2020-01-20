@@ -24,6 +24,7 @@ public class CircleBrick extends Brick{
         shape = new Circle(x, y, radius);
         shape.setFill(Color.ORANGE);
         hp = health;
+        updateImage();
     }
 
     @Override

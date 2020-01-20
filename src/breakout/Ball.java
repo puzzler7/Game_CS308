@@ -8,6 +8,8 @@ import javafx.scene.shape.Circle;
 public class Ball extends Circle {
     private double xVelocity;
     private double yVelocity;
+    private double xNegate = 1;
+    private double yNegate = 1;
     private int bounceX; //FIXME remove for Main consts?
     private int bounceY;
     private ImagePattern image;
@@ -41,12 +43,24 @@ public class Ball extends Circle {
         this.setFill(image);
     }
 
-    public void update(double elapsedTime) { //currently returns if the ball dies.
+    public void update(double elapsedTime) {
+        xVelocity *= xNegate;
+        yVelocity *= yNegate;
         setX(getX() + xVelocity * elapsedTime);
         setY(getY() + yVelocity * elapsedTime);
         double mag = xVelocity*xVelocity+yVelocity*yVelocity;
         mag = Math.pow(mag, .5);
         setRotate(getRotate()+mag/100);//FIXME
+        xNegate = 1;
+        yNegate = 1;
+    }
+
+    public void setXNegate(double xNegate) {
+        this.xNegate = xNegate;
+    }
+
+    public void setYNegate(double yNegate) {
+        this.yNegate = yNegate;
     }
 
     public boolean checkBounce() {

@@ -70,7 +70,6 @@ public class Paddle extends Rectangle {
         for (PowerUp p: powerups) {
             Shape intersection = Shape.intersect(this, p.getShape());
             if (intersection.getBoundsInLocal().getWidth()!= -1) {
-                System.out.println("collide");
                 Main.addPowerup(p.getId());
                 p.die();
             }

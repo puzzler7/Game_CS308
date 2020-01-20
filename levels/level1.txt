@@ -1,3 +1,10 @@
-== ==
-o1 s1
-s1 o1
+== == == == == ==
+o9 o9 o9 o9 o9 o9
+xx xx xx xx xx xx
+xx xx ta
+xx
+xx
+s9 s9 s9 s9 s9 s9
+xx
+xx
+xx xx ta 
