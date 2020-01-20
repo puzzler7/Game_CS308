@@ -150,11 +150,11 @@ public class Main extends Application {
         if (hasWon()) {
             storeScore();
             int currentLevel = Integer.parseInt(""+currentScene.charAt(currentScene.length()-1));
-            if (currentLevel==MAX_LEVEL){ //FIXME needs comment
+            if (currentLevel==MAX_LEVEL){
                 setDisplayScene(SceneHandler.getVictoryScene());
             } else {
                 setDisplayScene(SceneHandler.getLevelScene(currentLevel+1, balls, paddles, bricks, lives+1));
-                //FIXME gain life on level finish
+                //gain life on level finish
             }
         }
     }
@@ -167,10 +167,10 @@ public class Main extends Application {
         b.setX(Main.BALL_X);
         b.setY(Main.BALL_Y);
         b.setXVelocity(Main.BALL_X_VELOCITY);
-        b.setYVelocity(Main.BALL_Y_VELOCITY);//FIXME copied from scene handler
+        b.setYVelocity(Main.BALL_Y_VELOCITY);
         /*for (Paddle p: paddles) {
             p.setX(WIDTH/2);
-        }*/ //FIXME removed because mouse controls paddle
+        }*/ //removed because mouse controls paddle
     }
 
     public static void addPowerup(String id) {

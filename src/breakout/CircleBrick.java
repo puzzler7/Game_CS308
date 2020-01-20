@@ -7,7 +7,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class CircleBrick extends Brick{
-    public CircleBrick(double x, double y) { //FIXME constructors here similar to rectbrick ones, can I get it in super?
+    public CircleBrick(double x, double y) {
         this(x, y, Main.BRICK_HEALTH, Main.BRICK_RADIUS);
     }
 

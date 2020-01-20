@@ -10,7 +10,7 @@ public class Ball extends Circle {
     private double yVelocity;
     private double xNegate = 1;
     private double yNegate = 1;
-    private int bounceX; //FIXME remove for Main consts?
+    private int bounceX;
     private int bounceY;
     private ImagePattern image;
     private int dmg;
@@ -50,7 +50,7 @@ public class Ball extends Circle {
         setY(getY() + yVelocity * elapsedTime);
         double mag = xVelocity*xVelocity+yVelocity*yVelocity;
         mag = Math.pow(mag, .5);
-        setRotate(getRotate()+mag/100);//FIXME
+        setRotate(getRotate()+mag/100);
         xNegate = 1;
         yNegate = 1;
     }

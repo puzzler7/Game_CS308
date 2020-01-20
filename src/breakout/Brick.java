@@ -16,7 +16,7 @@ public abstract class Brick {
     protected int score = 100;
     protected double powerupChance = .5;
 
-    abstract void setCenterX(double x);//FIXME do a thing with getBoundinLocal/Parent?
+    abstract void setCenterX(double x);
     abstract void setCenterY(double y);
     abstract double getCenterX();
     abstract double getCenterY();
@@ -86,7 +86,7 @@ public abstract class Brick {
     }
 
     public void die() {
-        setCenterX(-Main.WIDTH*2); //FIXME better soln?
+        setCenterX(-Main.WIDTH*2); //moves offscreen
         setCenterY(-Main.HEIGHT*2);
         dead = true;
     }
