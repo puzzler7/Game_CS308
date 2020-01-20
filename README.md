@@ -3,7 +3,7 @@ game
 
 This project implements the game of Breakout.
 
-Name: 
+Name: Maverick Chung mc608
 
 ### Timeline
 
@@ -11,10 +11,10 @@ Start Date: 1/15/20
 
 Finish Date: 1/20/20
 
-Hours Spent: Approximately 14 hours, although I didn't really keep track.
+Hours Spent: Approximately 15 hours, although I didn't really keep track.
 
 ### Resources Used
-I used the the [official Java documentation](https://docs.oracle.com/javase/8/javafx/api/) extensively. Additionally,
+I used the the [official JavaFX documentation](https://docs.oracle.com/javase/8/javafx/api/) extensively. Additionally,
 I used these free sprites from [OpenGameArts](https://opengameart.org/content/breakout-brick-breaker-tile-set-free).
 
 
@@ -48,11 +48,15 @@ Extra credit: It seems that I've failed to find the extra credit, despite my sea
 
 
 ### Notes/Assumptions
+I'm assuming that the level files are all in my format, and that there are at least MAX_LEVEL levels. Additionally, I'm 
+assuming the user has Courier New on their computers, and that all of the data files are in the right place with the
+right names.
 
 
 ### Impressions
 I would have loved to spend time to make the game *feel* good, like making the paddle and bouncers bounce slightly on
-hit, or have particle effects on brick destruction, but I didn't have the time.
+hit, have the ball velocity slowly curve to be more vertical over time,
+or have particle effects on brick destruction, but I didn't have the time.
 
 Additionally, my initial plan is an absolutely monstrous list of tasks. I must have been incredibly overconfident when I
 wrote that, because while I *could* implement most of the list without too much refactoring, I don't have the time.
