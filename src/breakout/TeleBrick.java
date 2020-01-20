@@ -37,6 +37,7 @@ public class TeleBrick extends CircleBrick {
 
     @Override
     protected void updateImage() {
-        shape.setFill(Color.PURPLE); //FIXME
+        Image i = new Image(BouncerBrick.class.getClassLoader().getResourceAsStream(Main.PORTAL_PATH));
+        setImage(i);
     }
 }

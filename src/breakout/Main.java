@@ -65,6 +65,8 @@ public class Main extends Application {
     public static final String[] POWERUP_CODES = {"newlife", "+1000", "-1000"};
     public static final String POWERUP_PATH_START = "powerups/";
     public static final String POWERUP_PATH_END = ".png";
+    public static final String BOUNCER_PATH = "bumper.png";
+    public static final String PORTAL_PATH = "portal.png";
 
 
     private static ArrayList<Ball> balls = new ArrayList<>();

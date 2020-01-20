@@ -18,7 +18,8 @@ public class BouncerBrick extends CircleBrick {
     public BouncerBrick(double x, double y, int health, double radius) {
         super(x, y, 999, radius);
         mustBeHit = false;
-        shape.setFill(Color.RED);
+        Image i = new Image(BouncerBrick.class.getClassLoader().getResourceAsStream(Main.BOUNCER_PATH));
+        setImage(i);
     }
 
     @Override
