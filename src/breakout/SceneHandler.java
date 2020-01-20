@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -14,6 +15,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SceneHandler {
+    public static final KeyCode[] digitCodes = {KeyCode.DIGIT0, KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3,
+            KeyCode.DIGIT4, KeyCode.DIGIT5, KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8, KeyCode.DIGIT9};
+    public static final KeyCode[] numPadCodes = {KeyCode.NUMPAD0, KeyCode.NUMPAD1, KeyCode.NUMPAD2, KeyCode.NUMPAD3,
+            KeyCode.NUMPAD4, KeyCode.NUMPAD5, KeyCode.NUMPAD6, KeyCode.NUMPAD7, KeyCode.NUMPAD8, KeyCode.NUMPAD9};
+
     private static Text lifecount;
     private static Text scorecount;
     private static PushButton deathButton;
@@ -78,9 +84,36 @@ public class SceneHandler {
 
         Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
         scene.setOnMouseMoved(e -> handleMouseInput(e.getX(), e.getY()));
+        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         Main.setScore(Main.STARTING_SCORE);
         Main.setCurrentSceneString("level"+level);
         return scene;
+    }
+
+    private static void handleKeyInput(KeyCode code) {
+        if (code == KeyCode.L) {
+            Main.setLives(Main.getLives()+1);
+        } else if (code == KeyCode.R) {
+            Main.resetBall();
+        } else {
+            checkNumKey(code);
+        }
+    }
+
+    private static void checkNumKey(KeyCode code) {
+        for (int i = 1; i < digitCodes.length; i++) {
+            if (code == digitCodes[i] || code == numPadCodes[i]){
+                if (i > Main.MAX_LEVEL) {
+                    i = Main.MAX_LEVEL;
+                }
+                Main.setDisplayScene(getLevelScene(i, Main.getBalls(), Main.getPaddles(), Main.getBricks(), Main.getLives()));
+                return;
+            }
+        }
+        if (code == digitCodes[0] || code == numPadCodes[0]){
+            Main.setDisplayScene(getLevelScene(Math.min(10, Main.MAX_LEVEL), Main.getBalls(), Main.getPaddles(),
+                    Main.getBricks(), Main.getLives()));
+        }
     }
 
     static void handleMouseInput(double x, double y) {

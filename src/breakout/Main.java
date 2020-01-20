@@ -59,7 +59,7 @@ public class Main extends Application {
     public static final int STARTING_LIVES = 5;
     public static final int SCORE_PER_LIFE = 500;
     public static final int STARTING_SCORE = 500;
-    public static final int MAX_LEVEL = 1;
+    public static final int MAX_LEVEL = 2;
 
 
     private static ArrayList<Ball> balls = new ArrayList<>();
@@ -72,8 +72,6 @@ public class Main extends Application {
     private static int lives;
     private static ArrayList<Integer> scores = new ArrayList<>();
     private static int score;
-
-
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -148,7 +146,7 @@ public class Main extends Application {
         }
     }
 
-    private void resetBall() {
+    static void resetBall() {
         if (balls.size() > 1) {
             balls.subList(1, balls.size()).clear();
         }
@@ -157,9 +155,9 @@ public class Main extends Application {
         b.setY(Main.BALL_Y);
         b.setXVelocity(Main.BALL_X_VELOCITY);
         b.setYVelocity(Main.BALL_Y_VELOCITY);//FIXME copied from scene handler
-        for (Paddle p: paddles) {
+        /*for (Paddle p: paddles) {
             p.setX(WIDTH/2);
-        }
+        }*/ //FIXME removed because mouse controls paddle
     }
 
     private void handlePowerups() {
@@ -196,6 +194,10 @@ public class Main extends Application {
 
     public static void setLives(int life) {
         lives = life;
+    }
+
+    public static int getLives() {
+        return lives;
     }
 
     public static void setScore(int sc) {
