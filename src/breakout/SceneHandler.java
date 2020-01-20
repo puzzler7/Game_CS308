@@ -25,8 +25,7 @@ public class SceneHandler {
     private static Text lifecount;
     private static Text scorecount;
     private static PushButton deathButton;
-    private static Image heartImage;
-    private static Image ballImage;
+    private static PushButton rulesButton;
     private static ArrayList<PushButton> menuButtons = new ArrayList<>();
 
     public static ArrayList<String> readFile(String path) throws FileNotFoundException {
@@ -88,7 +87,7 @@ public class SceneHandler {
 
         readBricks("levels/level" + level + ".txt", bricks, root);
 
-        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
+        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.BACKGROUND);
         scene.setOnMouseMoved(e -> handleMouseInput(e.getX(), e.getY()));
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         Main.setScore(Main.STARTING_SCORE);
@@ -210,7 +209,6 @@ public class SceneHandler {
         deathText.setY(Main.HEIGHT / 4);
         root.getChildren().add(deathText);
 
-        //FIXME score indicator
         Text endScore = new Text();
         endScore.setText("Final Score: "+(int)Main.getTotalScore());
         endScore.setFont(Main.MAIN_FONT);
@@ -226,7 +224,7 @@ public class SceneHandler {
         deathButton.setFill(Color.WHITE);
         root.getChildren().addAll(deathButton.getObjects());
 
-        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
+        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.BACKGROUND);
         scene.setOnMouseMoved(e -> deathMouse(e.getX(), e.getY()));
         scene.setOnMouseClicked(e -> deathClick(e.getX(), e.getY()));
         Main.setCurrentSceneString(type);
@@ -271,7 +269,7 @@ public class SceneHandler {
         root.getChildren().addAll(rulesButton.getObjects());
         menuButtons.add(rulesButton);
 
-        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
+        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.BACKGROUND);
         scene.setOnMouseMoved(e -> menuMouse(e.getX(), e.getY()));
         scene.setOnMouseClicked(e -> menuClick(e.getX(), e.getY()));
         Main.setCurrentSceneString("menu");
@@ -298,8 +296,46 @@ public class SceneHandler {
     }
 
     private static Scene getRulesScene() {
+        Group root = new Group();
+        Text rulesText = new Text();
+        rulesText.setWrappingWidth(Main.WIDTH-50); //FIXME magic val
+        rulesText.setTextAlignment(TextAlignment.CENTER);
+        rulesText.setText("Move the mouse to control the paddle. " +
+                "The faster you hit the ball with the paddle, " +
+                "the faster it moves. \n\n" +
+                "Bounce the ball off bricks to break them. " +
+                "Collect the powerups that fall, " +
+                "but avoid the harmful ones! ");
+        rulesText.setFont(Main.RULES_FONT);
+        rulesText.setX(Main.WIDTH / 2 - rulesText.getBoundsInLocal().getWidth() / 2);
+        rulesText.setY(Main.HEIGHT / 8);
+        root.getChildren().add(rulesText);
+
+        rulesButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Menu");
+        rulesButton.setCenterX(Main.WIDTH / 2);
+        rulesButton.setCenterY(Main.HEIGHT * 3/4);
+        rulesButton.setFill(Color.WHITE);
+        root.getChildren().addAll(rulesButton.getObjects());
+
+        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.BACKGROUND);
+        scene.setOnMouseMoved(e -> rulesMouse(e.getX(), e.getY()));
+        scene.setOnMouseClicked(e -> rulesClick(e.getX(), e.getY()));
         Main.setCurrentSceneString("rules");
-        return null;
+        return scene;
+    }
+
+    static void rulesMouse(double x, double y) {
+        if (rulesButton.contains(x, y)) {
+            rulesButton.onMouseover();
+        } else {
+            rulesButton.onMouseoff();
+        }
+    }
+
+    static void rulesClick(double x, double y) {
+        if (rulesButton.contains(x, y)) {
+            Main.setDisplayScene(getMenuScene());
+        }
     }
 
     public static Text getLifecount() {
@@ -312,7 +348,7 @@ public class SceneHandler {
 
     public static void setScoreText(double sco) {
         int sc = (int)sco;
-        scorecount.setText("Score: "+sc);
+        scorecount.setText("Score:"+sc);
         scorecount.setX(Main.WIDTH-scorecount.getBoundsInLocal().getWidth());
         scorecount.setY(Main.HEIGHT-Main.VOID_SIZE + 40); //FIXME magic val
     }

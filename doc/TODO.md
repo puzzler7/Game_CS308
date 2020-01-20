@@ -1,6 +1,5 @@
 ###Big things:
 
-- Make rules splash
 - rotate to ball velocity to vertical
 
 - powerup images

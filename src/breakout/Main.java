@@ -40,9 +40,8 @@ public class Main extends Application {
 
     public static final String HEART_IMAGE = "gameheart.png";
 
-    public static final Paint background1 = Color.BLUEVIOLET;
-    public static final Paint background2 = Color.BLACK;
-    public static final double POWERUP_WIDTH_HEIGHT_RATIO = 2;
+    public static final Paint BACKGROUND = Color.BLUEVIOLET;
+    public static final double POWERUP_WIDTH_HEIGHT_RATIO = 3;
     public static final double POWERUP_HEIGHT = 20;
     public static final double POWERUP_FALL = 400;
     public static final int POWERUP_DURATION = 300;
@@ -57,12 +56,15 @@ public class Main extends Application {
     private static final int SCORE_PER_FRAME = 1;
     public static Font MAIN_FONT = new Font("Courier New", 48);
     public static Font DISPLAY_FONT = new Font("Courier New", 40);
+    public static Font RULES_FONT = new Font("Courier New", 24);
     public static final int STARTING_LIVES = 5;
     public static final int SCORE_PER_LIFE = 500;
     public static final int STARTING_SCORE = 500;
     public static final int MAX_LEVEL = 2;
 
     public static final String[] POWERUP_CODES = {"newlife", "+1000", "-1000"};
+    public static final String POWERUP_PATH_START = "powerups/";
+    public static final String POWERUP_PATH_END = ".png";
 
 
     private static ArrayList<Ball> balls = new ArrayList<>();

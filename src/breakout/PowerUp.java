@@ -33,6 +33,9 @@ public class PowerUp extends RectBrick{
     public PowerUp(double x, double y, String code, double height) {
         super(x, y, 1, height);
         id = code;
+        Image i = new Image(PowerUp.class.getClassLoader().getResourceAsStream(Main.POWERUP_PATH_START + id
+                + Main.POWERUP_PATH_END));
+        setImage(i);
         yVelocity = Main.POWERUP_FALL;
         duration = Main.POWERUP_DURATION;
     }
@@ -53,6 +56,9 @@ public class PowerUp extends RectBrick{
 
     public void update(double elapsedTime) {
         setCenterY(getCenterY()+elapsedTime*yVelocity);
+        if (getCenterY()+getHeight()/2 > Main.HEIGHT-Main.VOID_SIZE) {
+            die();
+        }
     }
 
     public int getDuration() {
