@@ -39,11 +39,15 @@ public class SceneHandler {
     }
 
     public static Scene getLevelScene(int level, ArrayList<Ball> balls, ArrayList<Paddle> paddles, ArrayList<Brick> bricks, int lives) {
-        balls.clear();
-        paddles.clear();
-        bricks.clear();
+        Main.clearObjects();
         Main.setLives(lives);
         Group root = new Group();
+
+        Rectangle theVoid = new Rectangle(Main.WIDTH, Main.VOID_SIZE);
+        theVoid.setFill(Color.BLACK);
+        theVoid.setX(0);
+        theVoid.setY(Main.HEIGHT-Main.VOID_SIZE);
+        root.getChildren().add(theVoid);
 
         Image heartImage = new Image(SceneHandler.class.getClassLoader().getResourceAsStream(Main.HEART_IMAGE));
         ImageView heart = new ImageView(heartImage);
@@ -190,7 +194,7 @@ public class SceneHandler {
         endScore.setTextAlignment(TextAlignment.CENTER);
         endScore.setWrappingWidth(400); //FIXME magic val
         endScore.setX(Main.WIDTH / 2 - endScore.getBoundsInLocal().getWidth() / 2);
-        endScore.setY(Main.HEIGHT/3);
+        endScore.setY(Main.HEIGHT * 3/ 8);
         root.getChildren().add(endScore);
 
         deathButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Menu");

@@ -1,10 +1,12 @@
 package breakout;
 
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class Brick {
     protected Shape shape;
@@ -13,6 +15,7 @@ public abstract class Brick {
     protected boolean mustBeHit = true;
     protected boolean dead = false;
     protected int score = 100;
+    protected double powerupChance = .5;
 
     abstract void setCenterX(double x);//FIXME do a thing with getBoundinLocal/Parent?
     abstract void setCenterY(double y);
@@ -36,9 +39,16 @@ public abstract class Brick {
     public void update(){}
 
     protected void onHit(Ball b) {
-        b.setYVelocity(-b.getYVelocity());
+        checkForPowerup();
         Main.setScore(Main.getScore()+getScore());
         hit(b.getDmg());
+    }
+
+    protected void checkForPowerup(){
+        Random rand = new Random();
+        if (rand.nextDouble()<powerupChance) {
+            PowerUp.generateRandomPowerup(getCenterX(), getCenterY());
+        }
     }
 
     public int getHp() {

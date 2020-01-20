@@ -36,8 +36,7 @@ public class RectBrick extends Brick {
         } else {
             b.setYVelocity(-b.getYVelocity());
         }
-        Main.setScore(Main.getScore()+getScore());
-        hit(b.getDmg());
+        super.onHit(b);
     }
 
     @Override

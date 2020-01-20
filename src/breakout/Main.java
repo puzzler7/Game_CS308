@@ -61,6 +61,8 @@ public class Main extends Application {
     public static final int STARTING_SCORE = 500;
     public static final int MAX_LEVEL = 2;
 
+    public static final String[] POWERUP_CODES = {"newlife"};
+
 
     private static ArrayList<Ball> balls = new ArrayList<>();
     private static ArrayList<Paddle> paddles = new ArrayList<>();
@@ -72,9 +74,11 @@ public class Main extends Application {
     private static int lives;
     private static ArrayList<Integer> scores = new ArrayList<>();
     private static int score;
+    private static Stage myStage;
 
     @Override
     public void start(Stage stage) throws Exception {
+        myStage = stage;
         displayScene = SceneHandler.getMenuScene();
         stage.setScene(displayScene);
         stage.setTitle("My first test!");
@@ -102,6 +106,7 @@ public class Main extends Application {
         for (Paddle p : paddles) {
             p.update(elapsedTime);
             p.checkBallCollision(balls);
+            p.checkPowerupCollision(powerups);
             //idea: satisfaction paddle bounce
         }
         for (PowerUp p: powerups) {
@@ -161,16 +166,35 @@ public class Main extends Application {
         }*/ //FIXME removed because mouse controls paddle
     }
 
+    public static void addPowerup(String id) {
+        powerupTracker.put(id, POWERUP_DURATION);
+    }
+
     private void handlePowerups() {
         for (String id: powerupTracker.keySet()){
             if (powerupTracker.get(id)>0){
-                powerupTracker.put(id, Math.min(powerupTracker.get(id)-1, 0));
-                activatePowerup(id);
+                if (powerupTracker.get(id) == POWERUP_DURATION) {
+                    System.out.println("in");
+                    activatePowerup(id);
+                    continue;
+                }
+                powerupTracker.put(id, Math.max(powerupTracker.get(id)-1, 0));
+                if (powerupTracker.get(id) == 0) {
+                    deactivatePowerup(id);
+                }
             }
         }
     }
 
     private void activatePowerup(String id) {
+        if (id.equals(POWERUP_CODES[0])) { //newlife
+            lives++;
+            powerupTracker.put(id,0);
+            System.out.println("good");
+        }
+    }
+
+    private void deactivatePowerup(String id) {
         //FIXME
     }
 
@@ -179,6 +203,13 @@ public class Main extends Application {
             if (brick.mustBeHit()&&!brick.isDead()) return false;
         }
         return true;
+    }
+
+    public static void clearObjects() {
+        balls.clear();
+        paddles.clear();
+        bricks.clear();
+        powerups.clear();
     }
 
     public static ArrayList<Ball> getBalls() {
@@ -191,6 +222,10 @@ public class Main extends Application {
 
     public static ArrayList<Brick> getBricks() {
         return bricks;
+    }
+
+    public static ArrayList<PowerUp> getPowerups() {
+        return powerups;
     }
 
     public static void setLives(int life) {
@@ -229,8 +264,16 @@ public class Main extends Application {
         displayScene = scene;
     }
 
+    public static Scene getDisplayScene() {
+        return displayScene;
+    }
+
     public static void setCurrentSceneString(String str) {
         currentScene = str;
+    }
+
+    public static Stage getStage() {
+        return myStage;
     }
 
     public static void main(String[] args) {
