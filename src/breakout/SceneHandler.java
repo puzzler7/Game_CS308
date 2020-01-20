@@ -105,6 +105,10 @@ public class SceneHandler {
             Main.setSpeedFactor(Main.getSpeedFactor()-0.1);
         } else if (code == KeyCode.EQUALS) {
             Main.setSpeedFactor(Main.getSpeedFactor()+0.1);
+        } else if (code == KeyCode.M) {
+            Main.setScore(Main.getScore()-1000);
+        } else if (code == KeyCode.P) {
+            Main.setScore(Main.getScore()+1000);
         }
         else {
             checkNumKey(code);
