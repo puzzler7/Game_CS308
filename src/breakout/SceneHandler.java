@@ -128,8 +128,22 @@ public class SceneHandler {
     }
 
     public static Scene getDeathScene() {
+        return getEndScene("death");
+    }
+
+    public static Scene getVictoryScene() {
+        return getEndScene("victory");
+    }
+
+    public static Scene getEndScene(String type) {
         Group root = new Group();
-        Text deathText = new Text("You have died.");
+        Text deathText = null;
+        if (type.equals("death")) { //FIXME magic val
+            deathText = new Text("You have died.");
+        } else if (type.equals("victory")) {
+            deathText = new Text("You have won!");
+        }
+
         deathText.setFont(Main.MAIN_FONT);
         deathText.setX(Main.WIDTH / 2 - deathText.getBoundsInLocal().getWidth() / 2);
         deathText.setY(Main.HEIGHT / 4);
@@ -146,7 +160,7 @@ public class SceneHandler {
         Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
         scene.setOnMouseMoved(e -> deathMouse(e.getX(), e.getY()));
         scene.setOnMouseClicked(e -> deathClick(e.getX(), e.getY()));
-        Main.setCurrentSceneString("death");
+        Main.setCurrentSceneString(type);
         Main.clearScores();
         return scene;
     }
@@ -216,12 +230,6 @@ public class SceneHandler {
 
     private static Scene getRulesScene() {
         Main.setCurrentSceneString("rules");
-        return null;
-    }
-
-
-    public Scene getVictoryScene() {
-        Main.setCurrentSceneString("victory");
         return null;
     }
 

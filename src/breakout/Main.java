@@ -59,6 +59,7 @@ public class Main extends Application {
     public static final int STARTING_LIVES = 5;
     public static final int SCORE_PER_LIFE = 500;
     public static final int STARTING_SCORE = 500;
+    public static final int MAX_LEVEL = 1;
 
 
     private static ArrayList<Ball> balls = new ArrayList<>();
@@ -89,7 +90,13 @@ public class Main extends Application {
 
     public void update(double elapsedTime, Stage stage) {
         stage.setScene(displayScene);
-        //FIXME stop background physics
+        if(currentScene.length()>5 && currentScene.substring(0,5).equals("level")) {
+            levelUpdate(elapsedTime);
+        }
+
+    }
+
+    private void levelUpdate(double elapsedTime) {
         boolean dead = false;
         for (Ball b : balls) {
             b.update(elapsedTime);
@@ -125,22 +132,25 @@ public class Main extends Application {
             score += SCORE_PER_LIFE;
             lives--;
         }
-        try {
-            SceneHandler.setScoreText(score);
-            SceneHandler.getLifecount().setText("X" + lives);
-        } catch (NullPointerException e) {
-            System.out.println("bad");
-            //FIXME
-        }
+        SceneHandler.setScoreText(score);
+        SceneHandler.getLifecount().setText("X" + lives);
         if (lives <= 0) {
-            setLives(Integer.MAX_VALUE); //FIXME
             displayScene = SceneHandler.getDeathScene();
+        }
+        if (hasWon()) {
+            int currentLevel = Integer.parseInt(""+currentScene.charAt(currentScene.length()-1));
+            if (currentLevel==MAX_LEVEL){ //FIXME needs comment
+                setDisplayScene(SceneHandler.getVictoryScene());
+            } else {
+                setDisplayScene(SceneHandler.getLevelScene(currentLevel+1, balls, paddles, bricks, lives+1));
+                //FIXME gain life on level finish
+            }
         }
     }
 
     private void resetBall() {
-        for (int i = 1; i < balls.size(); i++) {
-            balls.remove(i);
+        if (balls.size() > 1) {
+            balls.subList(1, balls.size()).clear();
         }
         Ball b = balls.get(0);
         b.setX(Main.BALL_X);
@@ -209,7 +219,7 @@ public class Main extends Application {
         for (int i: scores) {
             ret += i;
         }
-        return ret;
+        return ret+lives*SCORE_PER_LIFE;
     }
 
     public static void setDisplayScene(Scene scene) {
