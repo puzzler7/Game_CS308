@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -52,7 +53,12 @@ public class Main extends Application {
     public static final double BUTTON_HEIGHT = 50;
     public static final double BUTTON_WIDTH_HEIGHT_RATIO = 4;
     public static final double BUTTON_SHRINK = 0.95;
+    private static final int SCORE_PER_FRAME = 1;
+    public static Font MAIN_FONT = new Font("Courier New", 48);
+    public static Font DISPLAY_FONT = new Font("Courier New", 40);
     public static final int STARTING_LIVES = 5;
+    public static final int SCORE_PER_LIFE = 500;
+    public static final int STARTING_SCORE = 500;
 
 
     private static ArrayList<Ball> balls = new ArrayList<>();
@@ -61,7 +67,11 @@ public class Main extends Application {
     private static HashMap<String,Integer> powerupTracker = new HashMap<>();
     private static ArrayList<PowerUp> powerups = new ArrayList<>();
     private static Scene displayScene;
-    private static int lives = 1;
+    private static String currentScene;
+    private static int lives;
+    private static ArrayList<Integer> scores = new ArrayList<>();
+    private static int score;
+
 
 
     @Override
@@ -110,14 +120,21 @@ public class Main extends Application {
             lives--;
             resetBall();
         }
+        score -= SCORE_PER_FRAME;
+        if (score <= 0) {
+            score += SCORE_PER_LIFE;
+            lives--;
+        }
         try {
+            SceneHandler.setScoreText(score);
             SceneHandler.getLifecount().setText("X" + lives);
         } catch (NullPointerException e) {
+            System.out.println("bad");
             //FIXME
         }
         if (lives <= 0) {
+            setLives(Integer.MAX_VALUE); //FIXME
             displayScene = SceneHandler.getDeathScene();
-            lives = 3; //FIXME magic val
         }
     }
 
@@ -171,8 +188,36 @@ public class Main extends Application {
         lives = life;
     }
 
+    public static void setScore(int sc) {
+        score = sc;
+    }
+
+    public static int getScore() {
+        return score;
+    }
+
+    public static void storeScore() {
+        scores.add(score);
+    }
+
+    public static void clearScores() {
+        scores.clear();
+    }
+
+    public static int getTotalScore() {
+        int ret = 0;
+        for (int i: scores) {
+            ret += i;
+        }
+        return ret;
+    }
+
     public static void setDisplayScene(Scene scene) {
         displayScene = scene;
+    }
+
+    public static void setCurrentSceneString(String str) {
+        currentScene = str;
     }
 
     public static void main(String[] args) {

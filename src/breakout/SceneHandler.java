@@ -6,7 +6,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.File;
@@ -16,11 +15,11 @@ import java.util.Scanner;
 
 public class SceneHandler {
     private static Text lifecount;
+    private static Text scorecount;
     private static PushButton deathButton;
     private static Image heartImage;
     private static Image ballImage;
     private static ArrayList<PushButton> menuButtons = new ArrayList<>();
-    private static Font mainfont = new Font("Courier New", 48); //FIXME magic val and dupe
 
     public static ArrayList<String> readFile(String path) throws FileNotFoundException {
         File file = new File(path);
@@ -33,9 +32,7 @@ public class SceneHandler {
     }
 
     public static Scene getLevelScene(int level, ArrayList<Ball> balls, ArrayList<Paddle> paddles, ArrayList<Brick> bricks, int lives) {
-        //FIXME implement level selection - currently, level param is ignored
-
-        balls.clear(); //FIXME better object clearing
+        balls.clear();
         paddles.clear();
         bricks.clear();
         Main.setLives(lives);
@@ -53,8 +50,16 @@ public class SceneHandler {
         lifecount.setX(heart.getBoundsInLocal().getWidth());
         lifecount.setY(Main.HEIGHT - Main.VOID_SIZE + 40); //FIXME magic val
         lifecount.setFill(Color.WHITE);
-        lifecount.setFont(mainfont);
+        lifecount.setFont(Main.DISPLAY_FONT);
         root.getChildren().add(lifecount);
+
+        scorecount = new Text();
+        setScoreText(Main.STARTING_SCORE);
+        scorecount.setX(Main.WIDTH-scorecount.getBoundsInLocal().getWidth());
+        scorecount.setY(Main.HEIGHT-Main.VOID_SIZE + 40); //FIXME magic val
+        scorecount.setFill(Color.WHITE);
+        scorecount.setFont(Main.DISPLAY_FONT);
+        root.getChildren().add(scorecount);
 
         Image ballImage = new Image(SceneHandler.class.getClassLoader().getResourceAsStream(Main.BALL_IMAGE));
         Ball b = new Ball(ballImage);
@@ -73,6 +78,8 @@ public class SceneHandler {
 
         Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
         scene.setOnMouseMoved(e -> handleMouseInput(e.getX(), e.getY()));
+        Main.setScore(Main.STARTING_SCORE);
+        Main.setCurrentSceneString("level"+level);
         return scene;
     }
 
@@ -123,14 +130,14 @@ public class SceneHandler {
     public static Scene getDeathScene() {
         Group root = new Group();
         Text deathText = new Text("You have died.");
-        deathText.setFont(mainfont);
+        deathText.setFont(Main.MAIN_FONT);
         deathText.setX(Main.WIDTH / 2 - deathText.getBoundsInLocal().getWidth() / 2);
         deathText.setY(Main.HEIGHT / 4);
         root.getChildren().add(deathText);
 
         //FIXME score indicator
 
-        deathButton = new PushButton(0,0,50, "Menu"); //FIXME magic val height
+        deathButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Menu");
         deathButton.setCenterX(Main.WIDTH / 2);
         deathButton.setCenterY(Main.HEIGHT / 2);
         deathButton.setFill(Color.WHITE);
@@ -139,6 +146,8 @@ public class SceneHandler {
         Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
         scene.setOnMouseMoved(e -> deathMouse(e.getX(), e.getY()));
         scene.setOnMouseClicked(e -> deathClick(e.getX(), e.getY()));
+        Main.setCurrentSceneString("death");
+        Main.clearScores();
         return scene;
     }
 
@@ -162,18 +171,18 @@ public class SceneHandler {
         Group root = new Group();
         Text titleText = new Text("Speedy Bricks");
 
-        titleText.setFont(mainfont);
+        titleText.setFont(Main.MAIN_FONT);
         titleText.setX(Main.WIDTH / 2 - titleText.getBoundsInLocal().getWidth() / 2);
         titleText.setY(Main.HEIGHT / 4);
         root.getChildren().add(titleText);
 
-        PushButton startButton = new PushButton(0,0,50, "Start"); //FIXME magic val height
+        PushButton startButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Start");
         startButton.setCenterX(Main.WIDTH / 2);
         startButton.setCenterY(Main.HEIGHT / 2);
         root.getChildren().addAll(startButton.getObjects());
         menuButtons.add(startButton);
 
-        PushButton rulesButton = new PushButton(0,0,50, "Rules"); //FIXME magic val height
+        PushButton rulesButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Rules");
         rulesButton.setCenterX(Main.WIDTH / 2);
         rulesButton.setCenterY(Main.HEIGHT *5/8);
         root.getChildren().addAll(rulesButton.getObjects());
@@ -182,6 +191,7 @@ public class SceneHandler {
         Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.background1);
         scene.setOnMouseMoved(e -> menuMouse(e.getX(), e.getY()));
         scene.setOnMouseClicked(e -> menuClick(e.getX(), e.getY()));
+        Main.setCurrentSceneString("menu");
         return scene;
     }
 
@@ -205,16 +215,28 @@ public class SceneHandler {
     }
 
     private static Scene getRulesScene() {
+        Main.setCurrentSceneString("rules");
         return null;
     }
 
 
     public Scene getVictoryScene() {
+        Main.setCurrentSceneString("victory");
         return null;
     }
 
     public static Text getLifecount() {
         return lifecount;
+    }
+
+    public static Text getScoreText() {
+        return scorecount;
+    }
+
+    public static void setScoreText(int sc) {
+        scorecount.setText("Score: "+sc);
+        scorecount.setX(Main.WIDTH-scorecount.getBoundsInLocal().getWidth());
+        scorecount.setY(Main.HEIGHT-Main.VOID_SIZE + 40); //FIXME magic val
     }
 
     public static Rectangle getDeathButton() {

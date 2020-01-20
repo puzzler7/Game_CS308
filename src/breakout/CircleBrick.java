@@ -38,6 +38,7 @@ public class CircleBrick extends Brick{
         newY *= mag/norm;
         b.setXVelocity(newX);
         b.setYVelocity(newY);
+        Main.setScore(Main.getScore()+getScore());
         hit(b.getDmg());
     }
 
