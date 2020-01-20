@@ -8,6 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -183,10 +184,18 @@ public class SceneHandler {
         root.getChildren().add(deathText);
 
         //FIXME score indicator
+        Text endScore = new Text();
+        endScore.setText("Final Score: "+Main.getTotalScore());
+        endScore.setFont(Main.MAIN_FONT);
+        endScore.setTextAlignment(TextAlignment.CENTER);
+        endScore.setWrappingWidth(400); //FIXME magic val
+        endScore.setX(Main.WIDTH / 2 - endScore.getBoundsInLocal().getWidth() / 2);
+        endScore.setY(Main.HEIGHT/3);
+        root.getChildren().add(endScore);
 
         deathButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Menu");
         deathButton.setCenterX(Main.WIDTH / 2);
-        deathButton.setCenterY(Main.HEIGHT / 2);
+        deathButton.setCenterY(Main.HEIGHT * 2/3);
         deathButton.setFill(Color.WHITE);
         root.getChildren().addAll(deathButton.getObjects());
 

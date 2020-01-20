@@ -136,6 +136,7 @@ public class Main extends Application {
             displayScene = SceneHandler.getDeathScene();
         }
         if (hasWon()) {
+            storeScore();
             int currentLevel = Integer.parseInt(""+currentScene.charAt(currentScene.length()-1));
             if (currentLevel==MAX_LEVEL){ //FIXME needs comment
                 setDisplayScene(SceneHandler.getVictoryScene());
