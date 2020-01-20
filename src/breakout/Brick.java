@@ -1,11 +1,9 @@
 package breakout;
 
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Shape;
 
-import javax.print.attribute.standard.NumberUp;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -41,7 +39,7 @@ public abstract class Brick {
 
     protected void onHit(Ball b) {
         checkForPowerup();
-        Main.setScore(Main.getScore()+getScore());
+        Main.setScore((int)(Main.getScore()+getScore()*Main.getSpeedFactor()));
         hit(b.getDmg());
         updateImage();
     }

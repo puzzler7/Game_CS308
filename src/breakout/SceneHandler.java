@@ -101,7 +101,12 @@ public class SceneHandler {
             Main.setLives(Main.getLives()+1);
         } else if (code == KeyCode.R) {
             Main.resetBall();
-        } else {
+        } else if (code == KeyCode.MINUS) {
+            Main.setSpeedFactor(Main.getSpeedFactor()-0.1);
+        } else if (code == KeyCode.EQUALS) {
+            Main.setSpeedFactor(Main.getSpeedFactor()+0.1);
+        }
+        else {
             checkNumKey(code);
         }
     }
@@ -207,7 +212,7 @@ public class SceneHandler {
 
         //FIXME score indicator
         Text endScore = new Text();
-        endScore.setText("Final Score: "+Main.getTotalScore());
+        endScore.setText("Final Score: "+(int)Main.getTotalScore());
         endScore.setFont(Main.MAIN_FONT);
         endScore.setTextAlignment(TextAlignment.CENTER);
         endScore.setWrappingWidth(400); //FIXME magic val
@@ -305,7 +310,8 @@ public class SceneHandler {
         return scorecount;
     }
 
-    public static void setScoreText(int sc) {
+    public static void setScoreText(double sco) {
+        int sc = (int)sco;
         scorecount.setText("Score: "+sc);
         scorecount.setX(Main.WIDTH-scorecount.getBoundsInLocal().getWidth());
         scorecount.setY(Main.HEIGHT-Main.VOID_SIZE + 40); //FIXME magic val

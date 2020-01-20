@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -13,7 +12,6 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 
 public class Main extends Application {
@@ -75,9 +73,10 @@ public class Main extends Application {
     private static Scene displayScene;
     private static String currentScene;
     private static int lives;
-    private static ArrayList<Integer> scores = new ArrayList<>();
-    private static int score;
+    private static ArrayList<Double> scores = new ArrayList<Double>();
+    private static double score;
     private static Stage myStage;
+    private static double speedFactor = 1;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -94,6 +93,7 @@ public class Main extends Application {
     }
 
     public void update(double elapsedTime, Stage stage) {
+        elapsedTime *= speedFactor;
         stage.setScene(displayScene);
         if(currentScene.length()>5 && currentScene.substring(0,5).equals("level")) {
             levelUpdate(elapsedTime);
@@ -133,9 +133,9 @@ public class Main extends Application {
             lives--;
             resetBall();
         }
-        score -= SCORE_PER_FRAME;
+        score -= SCORE_PER_FRAME*speedFactor;
         if (score <= 0) {
-            score += SCORE_PER_LIFE;
+            score += SCORE_PER_LIFE*speedFactor;
             lives--;
         }
         SceneHandler.setScoreText(score);
@@ -190,7 +190,7 @@ public class Main extends Application {
 
     private void activatePowerup(String id) {
         if (id.equals(POWERUP_CODES[0])) { //newlife
-            lives++;
+            setLives(lives+1);
             powerupTracker.put(id,0);
         } else if (id.equals(POWERUP_CODES[1])) { //+1000
             score += 1000;
@@ -220,6 +220,14 @@ public class Main extends Application {
         powerups.clear();
     }
 
+    public static void setSpeedFactor(double factor) {
+        speedFactor = Math.min(Math.max(0.1,factor),5);
+    }
+
+    public static double getSpeedFactor() {
+        return speedFactor;
+    }
+
     public static ArrayList<Ball> getBalls() {
         return balls;
     }
@@ -237,18 +245,18 @@ public class Main extends Application {
     }
 
     public static void setLives(int life) {
-        lives = life;
+        lives = Math.min(99,life);
     }
 
     public static int getLives() {
         return lives;
     }
 
-    public static void setScore(int sc) {
+    public static void setScore(double sc) {
         score = sc;
     }
 
-    public static int getScore() {
+    public static double getScore() {
         return score;
     }
 
@@ -260,9 +268,9 @@ public class Main extends Application {
         scores.clear();
     }
 
-    public static int getTotalScore() {
-        int ret = 0;
-        for (int i: scores) {
+    public static double getTotalScore() {
+        double ret = 0;
+        for (double i: scores) {
             ret += i;
         }
         return ret+lives*SCORE_PER_LIFE;

@@ -34,11 +34,9 @@ public class RectBrick extends Brick {
     public void onHit(Ball b) {
         if (b.getCenterX()<getCenterX()-getWidth()/2 || b.getCenterX()>getCenterX()+getWidth()/2) {
             b.setXNegate(-1);
-            System.out.println("x");
         }
         if (b.getCenterY()<getCenterY()-getHeight()/2 || b.getCenterY()>getCenterY()+getHeight()/2) {
             b.setYNegate(-1);
-            System.out.println("y");
         }
         super.onHit(b);
     }
