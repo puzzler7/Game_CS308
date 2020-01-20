@@ -1,0 +1,7 @@
+== == == == == == ==
+xx s1 s1 s1 s1 s1 xx
+s1 s1 s5 s1 s5 s1 s1
+s1 s5 s1 s1 s1 s5 s1
+s5 o1 xx s1 xx o1 s5
+xx s1 s1 s1 s1 s1 xx
+b2 xx xx xx xx b2 xx

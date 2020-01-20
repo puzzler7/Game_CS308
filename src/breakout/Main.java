@@ -56,11 +56,11 @@ public class Main extends Application {
     private static final int SCORE_PER_FRAME = 1;
     public static Font MAIN_FONT = new Font("Courier New", 48);
     public static Font DISPLAY_FONT = new Font("Courier New", 40);
-    public static Font RULES_FONT = new Font("Courier New", 24);
+    public static Font RULES_FONT = new Font("Courier New", 20);
     public static final int STARTING_LIVES = 5;
     public static final int SCORE_PER_LIFE = 500;
     public static final int STARTING_SCORE = 500;
-    public static final int MAX_LEVEL = 2;
+    public static final int MAX_LEVEL = 4;
 
     public static final String[] POWERUP_CODES = {"newlife", "+1000", "-1000"};
     public static final String POWERUP_PATH_START = "powerups/";

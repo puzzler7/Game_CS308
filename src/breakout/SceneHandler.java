@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -305,13 +306,15 @@ public class SceneHandler {
                 "the faster it moves. \n\n" +
                 "Bounce the ball off bricks to break them. " +
                 "Collect the powerups that fall, " +
-                "but avoid the harmful ones! ");
+                "but avoid the harmful ones! \n\n" +
+                "Your score is your lifeline - if it drops below zero," +
+                "you lose a life!");
         rulesText.setFont(Main.RULES_FONT);
         rulesText.setX(Main.WIDTH / 2 - rulesText.getBoundsInLocal().getWidth() / 2);
         rulesText.setY(Main.HEIGHT / 8);
         root.getChildren().add(rulesText);
 
-        rulesButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Menu");
+        rulesButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Next");
         rulesButton.setCenterX(Main.WIDTH / 2);
         rulesButton.setCenterY(Main.HEIGHT * 3/4);
         rulesButton.setFill(Color.WHITE);
@@ -320,6 +323,46 @@ public class SceneHandler {
         Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.BACKGROUND);
         scene.setOnMouseMoved(e -> rulesMouse(e.getX(), e.getY()));
         scene.setOnMouseClicked(e -> rulesClick(e.getX(), e.getY()));
+        Main.setCurrentSceneString("rules");
+        return scene;
+    }
+
+    private static Scene getRules2Scene() {
+        Group root = new Group();
+        Text rulesText = new Text();
+        rulesText.setWrappingWidth(Main.WIDTH/2); //FIXME magic val
+        rulesText.setTextAlignment(TextAlignment.CENTER);
+        rulesText.setText("These are some normal bricks.\n" +
+                "Some colors require more hits!\n\n\n" +
+                "This is a bumper.\n" +
+                "It will launch you away.\n\n\n" +
+                "This is a portal.\n" +
+                "It will take you to another one.");
+        rulesText.setFont(Main.RULES_FONT);
+        rulesText.setX(Main.WIDTH / 4 - rulesText.getBoundsInLocal().getWidth() / 2);
+        rulesText.setY(Main.HEIGHT / 8);
+        root.getChildren().add(rulesText);
+        double x = Main.WIDTH*3/4;
+
+        RectBrick rbrick = new RectBrick(x, Main.HEIGHT/8, 2);
+        CircleBrick cbrick = new CircleBrick(x, Main.HEIGHT/4, 4);
+        BouncerBrick bbrick = new BouncerBrick(x, Main.HEIGHT*7/16);
+        TeleBrick tbrick = new TeleBrick(x, Main.HEIGHT*5/8);
+
+        root.getChildren().add(rbrick.getShape());
+        root.getChildren().add(cbrick.getShape());
+        root.getChildren().add(bbrick.getShape());
+        root.getChildren().add(tbrick.getShape());
+
+        rulesButton = new PushButton(0,0,Main.BUTTON_HEIGHT, "Menu");
+        rulesButton.setCenterX(Main.WIDTH / 2);
+        rulesButton.setCenterY(Main.HEIGHT * 7/8);
+        rulesButton.setFill(Color.WHITE);
+        root.getChildren().addAll(rulesButton.getObjects());
+
+        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Main.BACKGROUND);
+        scene.setOnMouseMoved(e -> rulesMouse(e.getX(), e.getY()));
+        scene.setOnMouseClicked(e -> rules2Click(e.getX(), e.getY()));
         Main.setCurrentSceneString("rules");
         return scene;
     }
@@ -333,6 +376,12 @@ public class SceneHandler {
     }
 
     static void rulesClick(double x, double y) {
+        if (rulesButton.contains(x, y)) {
+            Main.setDisplayScene(getRules2Scene());
+        }
+    }
+
+    static void rules2Click(double x, double y) {
         if (rulesButton.contains(x, y)) {
             Main.setDisplayScene(getMenuScene());
         }
