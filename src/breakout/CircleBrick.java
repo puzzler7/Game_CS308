@@ -1,11 +1,15 @@
 package breakout;
 
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
+/**
+ * A circular brick that extends brick.
+ *
+ * Assumes that all inputs are positive and valid.
+ *
+ * @author Maverick Chung mc608
+ */
 public class CircleBrick extends Brick{
     public CircleBrick(double x, double y) {
         this(x, y, Main.BRICK_HEALTH, Main.BRICK_RADIUS);
@@ -15,11 +19,6 @@ public class CircleBrick extends Brick{
         this(x, y, health, Main.BRICK_RADIUS);
     }
 
-    public CircleBrick(double x, double y, Image i) {
-        this(x,y);
-        setImage(i);
-    }
-
     public CircleBrick(double x, double y, int health, double radius) {
         shape = new Circle(x, y, radius);
         shape.setFill(Color.ORANGE);
@@ -27,6 +26,10 @@ public class CircleBrick extends Brick{
         updateImage();
     }
 
+    /**
+     * Causes the ball to bounce back radially outwards from the brick.
+     * @param b Ball that hit this brick
+     */
     @Override
     public void onHit(Ball b) {
         double mag = b.getXVelocity()*b.getXVelocity()+b.getYVelocity()*b.getYVelocity();

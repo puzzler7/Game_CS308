@@ -1,18 +1,15 @@
 package breakout;
 
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
-
+/**
+ * A indestructible circular bouncer brick.
+ *
+ * @author Maverick Chung mc608
+ */
 public class BouncerBrick extends CircleBrick {
     public BouncerBrick(double x, double y) {
         this(x, y, 999, Main.BRICK_RADIUS);
-    }
-
-    public BouncerBrick(double x, double y, Image i) {
-        super(x, y, i);
-        hp = 999;
-        mustBeHit = false;
     }
 
     public BouncerBrick(double x, double y, int health, double radius) {
@@ -22,6 +19,10 @@ public class BouncerBrick extends CircleBrick {
         setImage(i);
     }
 
+    /**
+     * In addition to bouncing the ball away radially, the bumper also speeds up the ball slightly.
+     * @param b Ball that hit this brick
+     */
     @Override
     public void onHit(Ball b) {
         super.onHit(b);
@@ -29,6 +30,9 @@ public class BouncerBrick extends CircleBrick {
         b.setYVelocity(b.getYVelocity()*Main.BOUNCER_SPEED);
     }
 
+    /**
+     * Overrides the parent update image so that the bumper image isn't removed on hit.
+     */
     @Override
     protected void updateImage() {
 

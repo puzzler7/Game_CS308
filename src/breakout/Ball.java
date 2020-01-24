@@ -5,6 +5,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
+
+/**
+ * Class for the bouncing ball.
+ *
+ * Assumes that valid inputs are given for all values (i.e. all positions and velocities given are positive).
+ *
+ * @author Maverick Chung mc608
+ */
 public class Ball extends Circle {
     private double xVelocity;
     private double yVelocity;
@@ -43,6 +51,12 @@ public class Ball extends Circle {
         this.setFill(image);
     }
 
+    /**
+     * Updates the ball position, based on the time elapsed.
+     * Does NOT check for collisions.
+     *
+     * @param elapsedTime time elapsed since last frame/update
+     */
     public void update(double elapsedTime) {
         xVelocity *= xNegate;
         yVelocity *= yNegate;
@@ -55,6 +69,7 @@ public class Ball extends Circle {
         yNegate = 1;
     }
 
+
     public void setXNegate(double xNegate) {
         this.xNegate = xNegate;
     }
@@ -63,6 +78,10 @@ public class Ball extends Circle {
         this.yNegate = yNegate;
     }
 
+    /**
+     * Checks for collision with the walls and the void.
+     * @return Returns true if the ball has hit the bottom of the screen.
+     */
     public boolean checkBounce() {
         if (getX() < getRadius()) {
             xVelocity *= -1;

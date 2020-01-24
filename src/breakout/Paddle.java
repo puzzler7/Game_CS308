@@ -4,8 +4,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
-import java.util.*;
+import java.util.ArrayList;
 
+/**
+ * Class for the paddle. Assumes all inputs are positive and valid.
+ *
+ * @author Maverick Chung mc608
+ */
 public class Paddle extends Rectangle {
     double lastX;
     double newX;
@@ -32,6 +37,10 @@ public class Paddle extends Rectangle {
         setFill(Color.PURPLE);
     }
 
+    /**
+     * Updates the position of the paddle and stores the velocity.
+     * @param elapsedTime Time since last frame/update.
+     */
     public void update(double elapsedTime) {
         vel = (newX - lastX) / elapsedTime;
         lastX = newX;
@@ -45,6 +54,10 @@ public class Paddle extends Rectangle {
 
     }
 
+    /**
+     * Checks to see if the balls have collided with the paddle. If so, updates their velocity accordingly.
+     * @param balls list of balls to be checked
+     */
     public void checkBallCollision(ArrayList<Ball> balls) {
         for (Ball b : balls) {
             Shape intersection = Shape.intersect(this, b);
@@ -53,8 +66,12 @@ public class Paddle extends Rectangle {
                 b.setYVelocity(-b.getYVelocity());
                 if (vel!=0) {
                     double ballXVel = b.getXVelocity();
-                    double newVel = ballXVel + vel / Math.abs(vel) * Math.pow(Math.abs(vel), .8);//FIXME magic val
-                    double scale = newVel / ballXVel / 2;//FIXME magic val
+
+                    //the paddle velocity is added to the ball velocity, but first it is scaled down
+                    //it is raised to the .8 power, keeping small velocities about the same
+                    //but lowering large velocities to reasonable numbers.
+                    double newVel = ballXVel + vel / Math.abs(vel) * Math.pow(Math.abs(vel), .8);
+                    double scale = newVel / ballXVel / 2;
                     b.setXVelocity(newVel);
                     b.setYVelocity(b.getYVelocity() + vel / Math.abs(vel) * Math.pow(Math.abs(vel), .8));
                 }
@@ -62,10 +79,19 @@ public class Paddle extends Rectangle {
         }
     }
 
+    /**
+     * Set the next position of the paddle, to be updated on update() call.
+     * @param x new position of the paddle
+     */
     public void queueNewX(double x) {
         newX = x;
     }
 
+
+    /**
+     * Checks to see if the paddle has collected a powerup.
+     * @param powerups list of powerups to check.
+     */
     public void checkPowerupCollision(ArrayList<PowerUp> powerups) {
         for (PowerUp p: powerups) {
             Shape intersection = Shape.intersect(this, p.getShape());

@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -17,7 +16,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * A class to retrieve scenes for Main. Nearly everything in here should be static.
+ *
+ * Assumes that the level files are in place, are named correctly, and that there are at least as many as Main.MAX_LEVEL
+ * Also assumes that all images are in the right place.
+ *
+ * @author Maverick Chung mc608
+ */
 public class SceneHandler {
+    /**
+     * Keycodes for the numbers on the keyboard for some more concise key checking code
+     */
     public static final KeyCode[] digitCodes = {KeyCode.DIGIT0, KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3,
             KeyCode.DIGIT4, KeyCode.DIGIT5, KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8, KeyCode.DIGIT9};
     public static final KeyCode[] numPadCodes = {KeyCode.NUMPAD0, KeyCode.NUMPAD1, KeyCode.NUMPAD2, KeyCode.NUMPAD3,
@@ -29,6 +39,12 @@ public class SceneHandler {
     private static PushButton rulesButton;
     private static ArrayList<PushButton> menuButtons = new ArrayList<>();
 
+    /**
+     * Reads the text a file into a string.
+     * @param path path to the file
+     * @return the String contents of the file
+     * @throws FileNotFoundException if the file does not exist
+     */
     public static ArrayList<String> readFile(String path) throws FileNotFoundException {
         File file = new File(path);
         Scanner sc = new Scanner(file);
@@ -39,6 +55,16 @@ public class SceneHandler {
         return ret;
     }
 
+    /**
+     * Gets the gameplay scenes for the different levels. Populates the lists in Main with objects so that they can be
+     * updated.
+     * @param level level number (1 to Main.MAX_LEVEL). No input validation is done
+     * @param balls A list of balls to populate
+     * @param paddles A list of paddles to populate
+     * @param bricks A list of bricks to populate
+     * @param lives the number of lives to start the level with
+     * @return a scene representing the appropriate level
+     */
     public static Scene getLevelScene(int level, ArrayList<Ball> balls, ArrayList<Paddle> paddles, ArrayList<Brick> bricks, int lives) {
         Main.clearObjects();
         Main.setLives(lives);
@@ -131,14 +157,20 @@ public class SceneHandler {
         }
     }
 
-    static void handleMouseInput(double x, double y) {
+    private static void handleMouseInput(double x, double y) {
         ArrayList<Paddle> paddles = Main.getPaddles();
         for (Paddle p : paddles) {
             p.queueNewX(x);
         }
     }
 
-    public static void readBricks(String path, ArrayList<Brick> bricks, Group root) {
+    /**
+     * Turns a file into a list of bricks, that get added to a Group so they can be in the scene.
+     * @param path path to the level file
+     * @param bricks a list of bricks to populate
+     * @param root the Group to populate
+     */
+    private static void readBricks(String path, ArrayList<Brick> bricks, Group root) {
         ArrayList<String> brickCodes = new ArrayList<>();
         try {
             brickCodes = readFile(path);
@@ -192,15 +224,27 @@ public class SceneHandler {
         }
     }
 
+    /**
+     * Gets the screen that appears when you die
+     * @return a scene for when you die
+     */
     public static Scene getDeathScene() {
         return getEndScene("death");
     }
 
+    /**
+     * Gets the screen that appears when you win
+     * @return a scene for when you win
+     */
     public static Scene getVictoryScene() {
         return getEndScene("victory");
     }
 
-    public static Scene getEndScene(String type) {
+    /**
+     * Gets the screen that appears when you end the game in some way
+     * @return a scene with a button to the menu
+     */
+    private static Scene getEndScene(String type) {
         Group root = new Group();
         Text deathText = null;
         if (type.equals("death")) { //FIXME magic val
@@ -237,7 +281,7 @@ public class SceneHandler {
         return scene;
     }
 
-    static void deathMouse(double x, double y) {
+    private static void deathMouse(double x, double y) {
         if (deathButton.contains(x, y)) {
             deathButton.onMouseover();
         } else {
@@ -245,12 +289,16 @@ public class SceneHandler {
         }
     }
 
-    static void deathClick(double x, double y) {
+    private static void deathClick(double x, double y) {
         if (deathButton.contains(x, y)) {
             Main.setDisplayScene(getMenuScene());
         }
     }
 
+    /**
+     * Gets the screen for the menu
+     * @return a scene for the menu
+     */
     public static Scene getMenuScene() {
         Main.setLives(Integer.MAX_VALUE); //FIXME
         menuButtons.clear();
@@ -281,7 +329,7 @@ public class SceneHandler {
         return scene;
     }
 
-    static void menuMouse(double x, double y) {
+    private static void menuMouse(double x, double y) {
         for (PushButton button: menuButtons) {
             if (button.contains(x, y)) {
                 button.onMouseover();
@@ -291,7 +339,7 @@ public class SceneHandler {
         }
     }
 
-    static void menuClick(double x, double y) {
+    private static void menuClick(double x, double y) {
         if (menuButtons.get(0).contains(x, y)) {
             Main.setDisplayScene(getLevelScene(1, Main.getBalls(), Main.getPaddles(), Main.getBricks(),
                     Main.STARTING_LIVES)); //FIXME
@@ -300,6 +348,10 @@ public class SceneHandler {
         }
     }
 
+    /**
+     * Gets the first page of the rules
+     * @return a scene for the first page of the rules
+     */
     private static Scene getRulesScene() {
         Group root = new Group();
         Text rulesText = new Text();
@@ -331,6 +383,10 @@ public class SceneHandler {
         return scene;
     }
 
+    /**
+     * Gets the second page of the rules
+     * @return a scene for the second page of the rules
+     */
     private static Scene getRules2Scene() {
         Group root = new Group();
         Text rulesText = new Text();
@@ -371,7 +427,7 @@ public class SceneHandler {
         return scene;
     }
 
-    static void rulesMouse(double x, double y) {
+    private static void rulesMouse(double x, double y) {
         if (rulesButton.contains(x, y)) {
             rulesButton.onMouseover();
         } else {
@@ -379,13 +435,13 @@ public class SceneHandler {
         }
     }
 
-    static void rulesClick(double x, double y) {
+    private static void rulesClick(double x, double y) {
         if (rulesButton.contains(x, y)) {
             Main.setDisplayScene(getRules2Scene());
         }
     }
 
-    static void rules2Click(double x, double y) {
+    private static void rules2Click(double x, double y) {
         if (rulesButton.contains(x, y)) {
             Main.setDisplayScene(getMenuScene());
         }
@@ -395,18 +451,10 @@ public class SceneHandler {
         return lifecount;
     }
 
-    public static Text getScoreText() {
-        return scorecount;
-    }
-
     public static void setScoreText(double sco) {
         int sc = (int)sco;
         scorecount.setText("Score:"+sc);
         scorecount.setX(Main.WIDTH-scorecount.getBoundsInLocal().getWidth());
         scorecount.setY(Main.HEIGHT-Main.VOID_SIZE + 40); //FIXME magic val
-    }
-
-    public static Rectangle getDeathButton() {
-        return deathButton;
     }
 }

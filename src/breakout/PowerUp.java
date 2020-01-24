@@ -1,20 +1,22 @@
 package breakout;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * A class for the powerup objects that fall. Extends RectBrick because it uses a lot of the same code (it's a
+ * rectangle so it uses a lot of the same positioning code, and they die)
+ *
+ * Assumes that the images for all of the ids exist and are named appropriately.
+ *
+ * @author Maverick Chung mc608
+ */
 public class PowerUp extends RectBrick{
     private String id;
     private double yVelocity;
@@ -40,6 +42,11 @@ public class PowerUp extends RectBrick{
         duration = Main.POWERUP_DURATION;
     }
 
+    /**
+     * Returns a random powerup at the given location
+     * @param x x location of the powerup
+     * @param y y location of the powerup
+     */
     public static void generateRandomPowerup(double x, double y) {
         Scene scene = Main.getDisplayScene();
         Random rand = new Random();
@@ -48,12 +55,19 @@ public class PowerUp extends RectBrick{
         Main.getPowerups().add(pow);
     }
 
+    /**
+     * These override the parent method so that balls don't collide with it
+     * @param balls parameter given to match parent signature
+     */
     @Override
     public void checkBallCollision(ArrayList<Ball> balls) {}
-
     @Override
     public void onHit(Ball b) {}
 
+    /**
+     * Updates the location of the powerup, and kills it if it touches the void
+     * @param elapsedTime time since last frame/update
+     */
     public void update(double elapsedTime) {
         setCenterY(getCenterY()+elapsedTime*yVelocity);
         if (getCenterY()+getHeight()/2 > Main.HEIGHT-Main.VOID_SIZE) {
@@ -85,6 +99,11 @@ public class PowerUp extends RectBrick{
         return yVelocity;
     }
 
+    /**
+     * Checks to see if the powerup has been collected by a paddle.
+     * @param paddles list of paddles to check collision with
+     * @return the id and duration of the collected powerup, or "none" if it's not collected
+     */
     public String checkPaddleCollision(ArrayList<Paddle> paddles) {
         for (Paddle p: paddles) {
             Shape intersection = Shape.intersect(shape, p);

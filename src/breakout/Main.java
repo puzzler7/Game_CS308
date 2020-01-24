@@ -13,7 +13,11 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * Main class for running the breakout game.
+ *
+ * @author Maverick Chung mc608
+ */
 public class Main extends Application {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 600;
@@ -82,8 +86,12 @@ public class Main extends Application {
     private static Stage myStage;
     private static double speedFactor = 1;
 
+    /**
+     * Starts the application.
+     * @param stage The stage to be displayed.
+     */
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage){
         myStage = stage;
         displayScene = SceneHandler.getMenuScene();
         stage.setScene(displayScene);
@@ -96,6 +104,11 @@ public class Main extends Application {
         animation.play();
     }
 
+    /**
+     * The method that runs every loop to update the game objects.
+     * @param elapsedTime time per frame
+     * @param stage the stage to be updated.
+     */
     public void update(double elapsedTime, Stage stage) {
         elapsedTime *= speedFactor;
         stage.setScene(displayScene);
@@ -159,7 +172,10 @@ public class Main extends Application {
         }
     }
 
-    static void resetBall() {
+    /**
+     * Resets the ball position. Does not reset the paddle position, as it is tracked by the mouse.
+     */
+    public static void resetBall() {
         if (balls.size() > 1) {
             balls.subList(1, balls.size()).clear();
         }
@@ -173,6 +189,10 @@ public class Main extends Application {
         }*/ //removed because mouse controls paddle
     }
 
+    /**
+     * Updates the powerup tracker with the id of the powerup, and the remaining duration
+     * @param id
+     */
     public static void addPowerup(String id) {
         powerupTracker.put(id, POWERUP_DURATION);
     }
@@ -217,6 +237,9 @@ public class Main extends Application {
         return true;
     }
 
+    /**
+     * Clears the object ArrayLists for the new scene.
+     */
     public static void clearObjects() {
         balls.clear();
         paddles.clear();
@@ -290,10 +313,6 @@ public class Main extends Application {
 
     public static void setCurrentSceneString(String str) {
         currentScene = str;
-    }
-
-    public static Stage getStage() {
-        return myStage;
     }
 
     public static void main(String[] args) {
