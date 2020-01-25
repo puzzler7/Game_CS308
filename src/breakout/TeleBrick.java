@@ -1,8 +1,5 @@
 package breakout;
 
-import javafx.scene.image.Image;
-
-
 /**
  * A circular brick that teleports the ball to its paired brick when hit (like a portal).
  *
@@ -44,11 +41,10 @@ public class TeleBrick extends CircleBrick {
     }
 
     /**
-     * Loads the portal image over the brick.
+     * Sets the image filepath to the correct picture so that Brick.updateImage() has the right image
      */
     @Override
-    protected void updateImage() {
-        Image i = new Image(BouncerBrick.class.getClassLoader().getResourceAsStream(Main.PORTAL_PATH));
-        setImage(i);
+    protected String getImageString(){
+        return Main.PORTAL_PATH;
     }
 }

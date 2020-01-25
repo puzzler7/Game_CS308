@@ -1,7 +1,5 @@
 package breakout;
 
-import javafx.scene.image.Image;
-
 /**
  * A indestructible circular bouncer brick.
  *
@@ -15,8 +13,6 @@ public class BouncerBrick extends CircleBrick {
     public BouncerBrick(double x, double y, int health, double radius) {
         super(x, y, 999, radius);
         mustBeHit = false;
-        Image i = new Image(BouncerBrick.class.getClassLoader().getResourceAsStream(Main.BOUNCER_PATH));
-        setImage(i);
     }
 
     /**
@@ -31,10 +27,10 @@ public class BouncerBrick extends CircleBrick {
     }
 
     /**
-     * Overrides the parent update image so that the bumper image isn't removed on hit.
+     * Sets the image filepath to the correct picture so that Brick.updateImage() has the right image
      */
     @Override
-    protected void updateImage() {
-
+    protected String getImageString(){
+        return Main.BOUNCER_PATH;
     }
 }

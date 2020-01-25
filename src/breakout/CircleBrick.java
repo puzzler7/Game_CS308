@@ -1,6 +1,5 @@
 package breakout;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 /**
@@ -21,7 +20,6 @@ public class CircleBrick extends Brick{
 
     public CircleBrick(double x, double y, int health, double radius) {
         shape = new Circle(x, y, radius);
-        shape.setFill(Color.ORANGE);
         hp = health;
         updateImage();
     }
@@ -64,6 +62,4 @@ public class CircleBrick extends Brick{
     double getCenterY() {
         return ((Circle)shape).getCenterY();
     }
-
-
 }
